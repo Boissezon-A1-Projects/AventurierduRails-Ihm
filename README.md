@@ -96,16 +96,13 @@ Dans votre code, pour déclencher les traitements du jeu à la suite des actions
 <br/>Ainsi, par exemple le code suivant `((VueDuJeu) getScene().getRoot()).getJeu()` permet d'accéder au jeu si la vue du jeu est la racine de la scène. Oui, il y a un [cast](https://docs.oracle.com/javase/specs/jls/se17/html/jls-5.html#jls-5.5), mais là, il est nécessaire ! :smirk:
 
 ### Utilisation de la classe [`Pane`](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/layout/Pane.html)
-Les vues qui sont proposées héritent actuellement de la classe [`Pane`](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/layout/Pane.html). Vous allez probablement changer cette classe de base afin d'utiliser un composant qui vous parait plus approprié.
-<br/>Si toutefois vous préférez continuer à utiliser cette classe (le fait de conserver `Pane` en classe de base ne limite pas vos choix de conception de l'IHM), vous devez créer les composants graphiques et les ajouter à la liste des enfants avec `getChildren()` de `Pane`. Si vous choisissez un autre conteneur comme classe de base, `getChildren()` ne sera peut-être plus la méthode à utiliser.
+Les vues qui sont proposées héritent actuellement de la classe [`Pane`](https://openjfx.io/javadoc/18/javafx.graphics/javafx/scene/layout/Pane.html). Vous allez probablement changer cette classe-mère afin d'utiliser un composant qui vous parait plus approprié.
+
+Si toutefois vous préférez continuer à utiliser cette classe (le fait de conserver `Pane` en classe de base ne limite pas vos choix de conception de l'IHM), vous devez créer les composants graphiques et les ajouter à la liste des enfants avec `getChildren()` de `Pane`. Si vous choisissez un autre conteneur comme classe de base, `getChildren()` ne sera peut-être plus la méthode à utiliser...
 
 ### Taille de la scène
 Elle s'adapte à la taille de l'écran. Vous pouvez modifier la donnée `DonneesGraphiques.pourcentageEcran` afin de choisir le pourcentage d'écran que vous souhaitez que votre vue principale occupe.
 <br/>Les bindings de redimensionnement du plateau, exécutés lorsque l'utilisateur redimensionne la fenêtre, vous sont fournis dans la classe `VuePlateau`, vous pouvez éventuellement vous en inspirer, si vous souhaitez aussi redimensionner certains de vos composants graphiques.
-
-### Utilisation de la classe `Pane`
-Les vues qui sont proposées héritent actuellement de la classe `Pane`. Vous allez probablement changer cette classe de base afin d'utiliser un composant qui vous parait plus approprié.
-<br/>Si toutefois vous préférez continuer à utiliser cette classe (le fait de conserver `Pane` en classe de base ne limite pas vos choix de conception de l'IHM), vous devez créer les composants graphiques et les ajouter à la liste des enfants avec `getChildren()` de `Pane`. Si vous choisissez un autre conteneur comme classe de base, `getChildren()` ne sera peut-être plus la méthode à utiliser.
 
 ### Les instructions pour l'utilisateur
 La propriété `instruction` qui est proposée dans l'interface `IJeu` représente l'information à transmettre à l'utilisateur pour qu'il puisse choisir sa prochaine action. Elle est automatiquement mise à jour dans la logique interne du jeu, et vous pouvez vous en servir dans votre interface pour afficher le message approprié.
