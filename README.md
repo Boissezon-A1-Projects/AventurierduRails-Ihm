@@ -67,17 +67,17 @@ Pour cette phase du projet, la partie qui vous intéresse se trouve dans ce paqu
 - La classe `VueCarteTransport` représente la vue d'une unique carte Wagon et la classe `VueDestination` représente la vue d'une unique carte Destination.
 - La classe `VueChoixJoueurs`, qui peut éventuellement être affichée en début de partie, permet de choisir le nombre et les noms des joueurs de la partie.
 - La classe `VueResultats` est affichée en fin de partie, elle affiche les scores de chacun des joueurs ; elle peut éventuellement proposer de rejouer.
-  <br/>En consultant les fichiers de ces classes, vous prendrez connaissance ces éléments essentiels à implémenter, auxquels vous avez toute liberté d'ajouter ce qui vous convient.
+  <br/>En consultant les fichiers de ces classes, vous prendrez connaissance des éléments essentiels à implémenter, auxquels vous avez toute liberté d'ajouter ce qui vous convient.
 
 ### Organisation interne de l'application
 La classe `RailsIHM` (en rose sur le diagramme de classes) vous est fournie. Elle représente l'`Application` JavaFX et effectue essentiellement plusieurs tâches :
-- Elle crée une partie (`Jeu`) qui gère la logique interne du jeu et qui s'exécute en réponse aux événements sur l'interface graphique.
-- Elle crée la scène en la construisant avec la première vue (objet de la classe `VueDuJeu`).
-- Elle peut, si souhaité, démarrer l'interface graphique sur une fenêtre permettant de saisir le nombre et les noms des joueurs de la partie (voir le [paragraphe correspondant](#ajout-dune-fenêtre-initiale-pour-le-choix-des-joueurs) plus loin).
+- Elle crée une partie (objet de type `Jeu`), qui gère la logique interne du jeu et qui s'exécute en réponse aux événements sur l'interface graphique.
+- Elle crée la scène en la construisant avec la première vue, qui est un objet de type `VueDuJeu`.
+- Par défaut, elle crée une partie à 4 joueurs. Si souhaité, vous pourrez faire en sorte qu'elle démarre l'interface graphique sur une fenêtre permettant de saisir le nombre et les noms des joueurs de la partie. Pour cela, quelques modifications de votre part seront nécessaires (voir le [paragraphe correspondant](#ajout-dune-fenêtre-initiale-pour-le-choix-des-joueurs) plus loin).
 
 ### Organisation interne des interfaces d'accès à la logique du jeu
 Dans les interfaces qui permettent d'accéder à la logique interne du jeu (en bleu sur le diagramme), vous constaterez que sont d'abord présentées les propriétés du jeu que vous pouvez écouter. Ensuite certains getters et enfin les méthodes que vous pouvez invoquer pour activer la logique interne.
-A priori, les propriétés essentielles pour la mise en place de l'interface graphique sont exportées dans ces interfaces. Mais vous pouvez ajouter d'autres méthodes dans ces interfaces si vous en avez besoin, pour cela voir le [paragraphe corresponant](#ajout-de-propriétés) plus loin.
+A priori, les propriétés essentielles pour la mise en place de l'interface graphique sont exportées dans ces interfaces. Mais vous pouvez ajouter d'autres méthodes dans ces interfaces si vous en avez besoin, pour cela voir le [paragraphe correspondant](#ajout-de-propriétés) plus loin.
 
 ## Quelques informations techniques
 ### Composant graphique et contrôleur
