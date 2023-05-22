@@ -470,7 +470,7 @@ public class Jeu implements IJeu {
         updateCartesTransportVisibles();
     }
 
-    public void initCartesVisibles () {
+    public void initialiserCartesVisibles() {
         ArrayList<CarteTransport> temporaire = new ArrayList<>();
         // Retourner 3 cartes wagon et 3 cartes bateau
         for (int i = 0; i < 3; i++) {
@@ -512,24 +512,30 @@ public class Jeu implements IJeu {
         return !piocheWagonEstVide() || !piocheBateauEstVide();
     }
 
-    public boolean onPeutPasPrendreDeDeuxiemeCarteVisible() {
+    public boolean onNePeutPasPrendreDeDeuxiemeCarteVisible() {
         return getCartesTransportVisibles().size() == 0 ||
-                (getCartesTransportVisibles().size() == 1
-                        && getCartesTransportVisibles().get(0).getType() == TypeCarteTransport.JOKER);
+                ilNeResteQueDesJokers();
+    }
+
+    public boolean ilNeResteQueDesJokers() {
+        for (CarteTransport carte : getCartesTransportVisibles())
+            if (carte.getType() != TypeCarteTransport.JOKER)
+                return false;
+        return true;
     }
 
     public void joueurSuivant() {
         passeAuJoueurSuivant();
         remplirPioches();
         instructionProperty().setValue(getEtatCourant().getInfosPhase() + getJoueurCourant().getNom());
-        if (joueurCourantDoitRevelerCartesTransportVisibles()) {
+        if (leJoueurCourantDoitRevelerCartesTransportVisibles()) {
             getJoueurCourant().revelerCartesVisibles();
         }
         else
             getJoueurCourant().jouerTour();
     }
 
-    public void initJoueurSuivant() {
+    public void initialiserJoueurSuivant() {
         getEtatCourant().prochainTour();
         passeAuJoueurSuivant();
         getJoueurCourant().preparation();
@@ -540,7 +546,7 @@ public class Jeu implements IJeu {
         pilesDeCartesBateau.remplirAvecDefausse();
     }
 
-    public boolean joueurCourantDoitRevelerCartesTransportVisibles() {
+    public boolean leJoueurCourantDoitRevelerCartesTransportVisibles() {
         int nbCartesVisiblesManquantes = 6 - cartesTransportVisibles.size();
         if (nbCartesVisiblesManquantes > 0) {
             if ((getPilesDeCartesWagon().getPilePioche().size() + getPilesDeCartesBateau().getPilePioche().size()) > nbCartesVisiblesManquantes) {

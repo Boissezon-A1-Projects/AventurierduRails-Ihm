@@ -16,14 +16,14 @@ public class DefausseDestinations extends EtatJoueur {
     }
 
     public void passer() {
-            joueurCourant.miseAJourDestinations();
+            joueurCourant.mettreAJourDestinations();
             finDuTour();
     }
 
     public void defausseDestination(Destination destination) {
-        joueurCourant.defausseDestination(destination);
+        joueurCourant.defausserDestination(destination);
         if (getJeu().destinationsInitialesProperty().size() == nbMinDestinations) {
-            joueurCourant.miseAJourDestinations();
+            joueurCourant.mettreAJourDestinations();
             finDuTour();
         } else {
             int nbRestants = getJeu().destinationsInitialesProperty().size() - nbMinDestinations;

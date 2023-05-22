@@ -1,8 +1,9 @@
 package fr.umontpellier.iut.rails.mecanique.etatsJoueur.actionsplateau;
 
-import fr.umontpellier.iut.rails.mecanique.Joueur;
 import fr.umontpellier.iut.rails.mecanique.data.CarteTransport;
 import fr.umontpellier.iut.rails.mecanique.data.Ville;
+import fr.umontpellier.iut.rails.mecanique.Joueur;
+import fr.umontpellier.iut.rails.mecanique.etatsJoueur.DebutTour;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class DefaussePourPort extends DefausseAvecRestrictionCartes {
             optionsChoix.remove(carte.getNom());
             nbCartesPosees += joueurCourant.poserCarteTransport(carte.getNom());
             if (4 - nbCartesPosees <= 0) {
-                joueurCourant.finaliseConstruirePort(port);
+                joueurCourant.finaliserConstruirePort(port);
                 finDuTour();
             } else {
                 int nbRestants = 4 - nbCartesPosees;
@@ -36,4 +37,9 @@ public class DefaussePourPort extends DefausseAvecRestrictionCartes {
         }
     }
 
+    @Override
+    public void construirePort(String nomPort) {
+        prochainEtat = new ConstructionPort(joueurCourant);
+        prochainEtat.prendreRoute(nomPort);
+    }
 }

@@ -1,10 +1,6 @@
 package fr.umontpellier.iut.rails.mecanique;
 
-import fr.umontpellier.iut.rails.ICarteTransport;
-import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJoueur;
-import fr.umontpellier.iut.rails.mecanique.Jeu;
-import fr.umontpellier.iut.rails.mecanique.Route;
 import fr.umontpellier.iut.rails.mecanique.data.*;
 import fr.umontpellier.iut.rails.mecanique.etatsJoueur.DebutTour;
 import fr.umontpellier.iut.rails.mecanique.etatsJoueur.EtatJoueur;
@@ -18,7 +14,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Joueur implements IJoueur {
 
@@ -209,12 +204,12 @@ public class Joueur implements IJoueur {
         }
     }
 
-    public void defausseDestination(Destination destinationChoisie) {
+    public void defausserDestination(Destination destinationChoisie) {
         jeu.destinationsInitialesProperty().remove(destinationChoisie);
         jeu.defausserDestination(destinationChoisie);
     }
 
-    public void miseAJourDestinations() {
+    public void mettreAJourDestinations() {
         List<Destination> destinationsPiochees = jeu.destinationsInitialesProperty();
         destinations.addAll(destinationsPiochees);
         jeu.destinationsInitialesProperty().clear();
@@ -261,7 +256,7 @@ public class Joueur implements IJoueur {
             temporaire.add(jeu.piocherCarteBateau());
         }
         cartesTransport.addAll(temporaire);
-        ajoutePionsWagonInitial(20);
+        ajouterPionsWagonInitial(20);
 
         // Piocher 5 destinations. Le joueur doit en garder au moins 3.
         prendreDestinationsInitiales();
@@ -333,7 +328,7 @@ public class Joueur implements IJoueur {
         return Math.min(nbPionsBateauEnReserve, nbPionsWagon.get());
     }
 
-    public void ajoutePionsWagon(int n) {
+    public void ajouterPionsWagon(int n) {
         nbPionsBateau.set(nbPionsBateau.get() - n);
         nbPionsBateauEnReserve += n;
         nbPionsWagon.set(nbPionsWagon.get() + n);
@@ -341,14 +336,14 @@ public class Joueur implements IJoueur {
         score.setValue(score.getValue() - n);
     }
 
-    public void ajoutePionsWagonInitial(int n) {
+    public void ajouterPionsWagonInitial(int n) {
         nbPionsWagon.setValue(n);
         nbPionsWagonEnReserve = 25 - n;
         nbPionsBateau.setValue(60 - n);
         nbPionsBateauEnReserve = n - 10;
     }
 
-    public void ajoutePionsBateau(int n) {
+    public void ajouterPionsBateau(int n) {
         nbPionsBateau.set(nbPionsBateau.get() + n);
         nbPionsBateauEnReserve -= n;
         nbPionsWagon.set(nbPionsWagon.get() - n);
@@ -356,7 +351,7 @@ public class Joueur implements IJoueur {
         score.setValue(score.getValue() - n);
     }
 
-    public void finaliseCaptureRoute(Route r) {
+    public void finaliserCaptureRoute(Route r) {
         jeu.retirerRouteLibre(r.getNom());
         r.setProprietaire(this);
         defausserCartesTransportPosees();
@@ -366,7 +361,7 @@ public class Joueur implements IJoueur {
         routes.add(r);
     }
 
-    public void finaliseConstruirePort(Ville port) {
+    public void finaliserConstruirePort(Ville port) {
         jeu.retirerPortLibre(port.getNom());
         port.setProprietaire(this);
         defausserCartesTransportPosees();
@@ -503,7 +498,7 @@ public class Joueur implements IJoueur {
         }
     }
 
-    public CarteTransport prendCarteTransportVisible(String choix) {
+    public CarteTransport prendreCarteTransportVisible(String choix) {
         for (CarteTransport c : jeu.getCartesTransportVisibles()) {
             if (c.getNom().equals(choix)) {
                 jeu.retirerCarteTransportVisible(c);

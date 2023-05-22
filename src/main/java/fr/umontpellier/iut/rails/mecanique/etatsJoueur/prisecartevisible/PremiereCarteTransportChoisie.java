@@ -11,7 +11,7 @@ public class PremiereCarteTransportChoisie extends EtatJoueur {
     }
 
     public void prendreCarte(CarteTransport carte) {
-        joueurCourant.getCartesTransport().add(joueurCourant.prendCarteTransportVisible(carte.getNom()));
+        joueurCourant.getCartesTransport().add(joueurCourant.prendreCarteTransportVisible(carte.getNom()));
         if (getJeu().onPeutEncorePiocher()) {
             if (carte.getType() == TypeCarteTransport.JOKER) {
                 prochainEtat = new ReveleNouvelleCarteTransportVisible2(joueurCourant);
@@ -20,7 +20,7 @@ public class PremiereCarteTransportChoisie extends EtatJoueur {
             }
             joueurCourant.setEtatCourant(prochainEtat);
         } else {
-            if (carte.getType() == TypeCarteTransport.JOKER || getJeu().onPeutPasPrendreDeDeuxiemeCarteVisible()) {
+            if (carte.getType() == TypeCarteTransport.JOKER || getJeu().onNePeutPasPrendreDeDeuxiemeCarteVisible()) {
                 finDuTour();
             } else {
                 getJeu().instructionProperty().setValue("Les pioches sont vides - Vous devez prendre une carte visible");

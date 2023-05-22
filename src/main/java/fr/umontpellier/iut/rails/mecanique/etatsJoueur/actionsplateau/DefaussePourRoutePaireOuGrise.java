@@ -17,4 +17,9 @@ public class DefaussePourRoutePaireOuGrise extends DefaussePourRoute {
         optionsChoix.addAll(joueurCourant.getCartesAutoriseesPourRoute(route.getNom()));
         super.jouerCarte(carte);
     }
+
+    public void prendreRoute(String nomRoute) {
+        prochainEtat = new PriseDeRoute(joueurCourant);
+        prochainEtat.prendreRoute(nomRoute);
+    }
 }

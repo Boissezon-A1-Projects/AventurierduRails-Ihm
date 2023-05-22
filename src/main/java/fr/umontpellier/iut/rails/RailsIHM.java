@@ -28,10 +28,10 @@ public class RailsIHM extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        debutDuJeu();
+        debuterJeu();
     }
 
-    public void debutDuJeu() {
+    public void debuterJeu() {
         if (avecVueChoixJoueurs) {
             vueChoixJoueurs = new VueChoixJoueurs();
             vueChoixJoueurs.setNomsDesJoueursDefinisListener(quandLesNomsJoueursSontDefinis);
@@ -65,7 +65,7 @@ public class RailsIHM extends Application {
         primaryStage.setMaxWidth(Screen.getPrimary().getBounds().getWidth());
         primaryStage.setMaxHeight(Screen.getPrimary().getBounds().getHeight());
         primaryStage.setOnCloseRequest(event -> {
-            this.onStopGame();
+            this.arreterJeu();
             event.consume();
         });
         primaryStage.show();
@@ -76,7 +76,7 @@ public class RailsIHM extends Application {
             demarrerPartie();
     };
 
-    public void onStopGame() {
+    public void arreterJeu() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
         alert.setContentText("On arrête de jouer ?");

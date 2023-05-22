@@ -12,8 +12,10 @@ public class DeuxiemeChoixCarte extends EtatJoueur {
     }
 
     public void prendreCarte(CarteTransport carte) {
-        if (carte.getType() != TypeCarteTransport.JOKER) {
-            joueurCourant.getCartesTransport().add(joueurCourant.prendCarteTransportVisible(carte.getNom()));
+        if (carte.getType() == TypeCarteTransport.JOKER) {
+            getJeu().instructionProperty().setValue("Vous ne pouvez pas prendre de Joker - Choisissez une autre carte");
+        } else {
+            joueurCourant.getCartesTransport().add(joueurCourant.prendreCarteTransportVisible(carte.getNom()));
             if (!getJeu().piocheWagonEstVide() || !getJeu().piocheBateauEstVide()) {
                 prochainEtat = new ReveleNouvelleCarteTransportVisible2(joueurCourant);
                 joueurCourant.setEtatCourant(prochainEtat);

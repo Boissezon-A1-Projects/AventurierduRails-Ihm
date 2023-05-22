@@ -26,6 +26,6 @@ public class SaisieNbPionsWagon extends EtatJoueur {
     }
 
     public void ajouterPions(int nbPionsDemandes) {
-        joueurCourant.ajoutePionsWagon(nbPionsDemandes);
+        joueurCourant.ajouterPionsWagon(nbPionsDemandes);
     }
 }

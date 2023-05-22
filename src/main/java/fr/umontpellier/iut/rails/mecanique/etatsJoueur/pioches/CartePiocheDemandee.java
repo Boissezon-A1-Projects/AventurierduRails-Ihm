@@ -17,7 +17,10 @@ public class CartePiocheDemandee extends EtatJoueur {
         if (!getJeu().piocheWagonEstVide()) {
             CarteTransport cartePiochee = getJeu().piocherCarteWagon();
             joueurCourant.getCartesTransport().add(cartePiochee);
-            prochainEtat = new DeuxiemeChoixCarte(joueurCourant);
+            if (getJeu().onNePeutPasPrendreDeDeuxiemeCarteVisible())
+                finDuTour();
+            else
+                prochainEtat = new DeuxiemeChoixCarte(joueurCourant);
         } else {
             getJeu().instructionProperty().setValue("Cette pioche est vide - Choisissez une autre action");
             prochainEtat = new DebutTour(joueurCourant);
@@ -29,7 +32,10 @@ public class CartePiocheDemandee extends EtatJoueur {
         if (!getJeu().piocheBateauEstVide()) {
             CarteTransport cartePiochee = getJeu().piocherCarteBateau();
             joueurCourant.getCartesTransport() .add(cartePiochee);
-            prochainEtat = new DeuxiemeChoixCarte(joueurCourant);
+            if (getJeu().onNePeutPasPrendreDeDeuxiemeCarteVisible())
+                finDuTour();
+            else
+                prochainEtat = new DeuxiemeChoixCarte(joueurCourant);
         } else {
             getJeu().instructionProperty().setValue("Cette pioche est vide - Choisissez une autre action");
             prochainEtat = new DebutTour(joueurCourant);

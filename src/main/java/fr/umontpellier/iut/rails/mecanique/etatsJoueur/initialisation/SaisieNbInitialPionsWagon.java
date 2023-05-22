@@ -18,13 +18,13 @@ public class SaisieNbInitialPionsWagon extends SaisieNbPionsWagon {
             getJeu().setEtatCourant(new PartieEnCours(getJeu()));
             getJeu().getEtatCourant().demarrerPartie();
         } else {
-            getJeu().initJoueurSuivant();
+            getJeu().initialiserJoueurSuivant();
         }
     }
 
     @Override
     public void ajouterPions(int nbPionsDemandes) {
-        joueurCourant.ajoutePionsWagonInitial(nbPionsDemandes);
+        joueurCourant.ajouterPionsWagonInitial(nbPionsDemandes);
     }
 
     @Override

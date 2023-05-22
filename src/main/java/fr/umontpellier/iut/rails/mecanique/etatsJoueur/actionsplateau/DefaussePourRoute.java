@@ -27,7 +27,7 @@ public class DefaussePourRoute extends DefausseAvecRestrictionCartes {
             optionsChoix.remove(carte.getNom());
             valeurPosee += joueurCourant.poserCarteTransport(carte.getNom());
             if (valeurAPayer - valeurPosee <= 0) {
-                joueurCourant.finaliseCaptureRoute(route);
+                joueurCourant.finaliserCaptureRoute(route);
                 finDuTour();
             } else {
                 int nbRestants = valeurAPayer - valeurPosee;
@@ -35,6 +35,11 @@ public class DefaussePourRoute extends DefausseAvecRestrictionCartes {
                 getJeu().instructionProperty().setValue(String.format("Il faut défausser %d carte%s" , nbRestants, pluriel));
             }
         }
+    }
+
+    public void prendreRoute(String nomRoute) {
+        prochainEtat = new PriseDeRoute(joueurCourant);
+        prochainEtat.prendreRoute(nomRoute);
     }
 
 }

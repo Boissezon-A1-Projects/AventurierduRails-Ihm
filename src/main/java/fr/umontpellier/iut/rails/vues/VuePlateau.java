@@ -48,12 +48,12 @@ public class VuePlateau extends Pane {
     };
 
     public void creerBindings() {
-        ajoutPorts();
-        ajoutRoutes();
+        ajouterPorts();
+        ajouterRoutes();
         bindRedimensionEtCentragePlateau();
     }
 
-    private void ajoutPorts() {
+    private void ajouterPorts() {
         for (String nomPort : DonneesGraphiques.ports.keySet()) {
             DonneesGraphiques.DonneesCerclesPorts positionPortSurPlateau = DonneesGraphiques.ports.get(nomPort);
             Circle cerclePort = new Circle(positionPortSurPlateau.centreX(), positionPortSurPlateau.centreY(), DonneesGraphiques.rayonInitial);
@@ -64,7 +64,7 @@ public class VuePlateau extends Pane {
         }
     }
 
-    private void ajoutRoutes() {
+    private void ajouterRoutes() {
         List<? extends IRoute> listeRoutes = ((VueDuJeu) getScene().getRoot()).getJeu().getRoutes();
         for (String nomRoute : DonneesGraphiques.routes.keySet()) {
             ArrayList<DonneesGraphiques.DonneesSegments> segmentsRoute = DonneesGraphiques.routes.get(nomRoute);

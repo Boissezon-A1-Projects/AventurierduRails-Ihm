@@ -10,7 +10,7 @@ public class PartieEnCours extends EtatJeu {
     @Override
     public void demarrerPartie() {
         jeu.jeuEnPreparationProperty().setValue(false);
-        jeu.initCartesVisibles();
+        jeu.initialiserCartesVisibles();
         jeu.passeAuJoueurSuivant();
         jeu.getJoueurCourant().jouerTour();
     }

@@ -16,7 +16,7 @@ public class SaisieNbPionsBateau extends EtatJoueur {
         try {
             nbPions = Integer.parseInt(nbPionsDemandes);
             if (1 <= nbPions  && nbPions <= valeurMax)  {
-                joueurCourant.ajoutePionsBateau(nbPions);
+                joueurCourant.ajouterPionsBateau(nbPions);
                 getJeu().saisieNbPionsBateauAutoriseeProperty().setValue(false);
                 finDuTour();
             }
