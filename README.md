@@ -38,18 +38,18 @@ Des consignes détaillées du projet vous sont données dans le fichier [Consign
 ## Présentation
 Vous connaissez déjà les règles, mais si besoin, vous pouvez les retrouver dans le repertoire `documents`.
 
-Vous partirez d'une version du moteur déjà implémentée (la logique de l'application), qu'a priori, vous ne devez pas modifier. Cette partie est différente de la correction de la [Phase 1](https://gitlabinfo.iutmontp.univ-montp2.fr/dev-objets/aventuriers-du-rail) du projet, elle a été adaptée pour réagir aux événements sur l'interface graphique. Vous considèrerez cette partie comme totalement encapsulée, non invocable directement, et vous la ferez exécuter en utilisant des interfaces _Java_ jouant un rôle de [façades](https://fr.wikipedia.org/wiki/Fa%C3%A7ade_(patron_de_conception)) permettant de communiquer avec la logique interne. Les méthodes de ces interfaces sont sommairement commentées, vous devez vous y référer (en complément du présent document) afin d'identifier laquelle utiliser dans quelle situation.
+Vous partirez d'une version du moteur déjà implémentée (la logique de l'application), qu'a priori, vous ne devez pas modifier. Cette partie est différente de la correction de la [Phase 1](https://gitlabinfo.iutmontp.univ-montp2.fr/dev-objets/aventuriers-du-rail) du projet, elle a été adaptée pour réagir aux événements sur l'interface graphique. Vous considèrerez cette partie comme totalement encapsulée, non invocable directement, et vous la ferez exécuter en utilisant des interfaces _Java_ jouant un rôle de [façades](https://fr.wikipedia.org/wiki/Fa%C3%A7ade_(patron_de_conception)), permettant de communiquer avec la logique interne. Les méthodes de ces interfaces sont sommairement commentées, vous devez vous y référer (en complément du présent document) afin d'identifier laquelle utiliser dans quelle situation.
 
 Vous allez implémenter plusieurs classes (certaines méthodes vous sont suggérées), dans lesquelles vous allez ajouter tout ce qui sera utile à votre IHM.
 
 ## Architecture générale du code
-Les classes sont exposées dans un diagramme de classes simplifié de l'application :
+Voici le diagramme de classes simplifié de l'application :
 
 ![](ressources/DiagrammeDeClasses.png)
 
 Pensez à le consulter en détails pour mieux vous situer.
 
-Ce modèle ne détaille pas les classes et relations de la partie mécanique du jeu, ni ne liste les méthodes des classes que vous utiliserez. Pour ne pas surcharger le diagramme, les attributs et les fonctions ne sont pas présentés. Vous y voyez surtout les classes qui sont nécessaires à votre travail.
+Ce diagramme ne détaille pas les classes et relations de la partie mécanique du jeu, ni ne liste les méthodes des classes que vous utiliserez. Pour ne pas surcharger le diagramme, les attributs et les fonctions ne sont pas présentés. **Vous y voyez surtout les classes qui sont nécessaires à votre travail.**
 
 ### Le paquetage `mecanique`
 
@@ -60,20 +60,23 @@ Ce paquetage, en gris sur le diagramme, représente la logique interne du jeu. *
 Pour cette phase du projet, la partie qui vous intéresse se trouve dans ce paquetage. Il contient les classes d'IHM à implémenter, indiquées en vert sur le diagramme. Dans la suite de ce document, ces classes seront désignées par `VueXXX`. D'autres classes (en jaune sur le diagramme) peuvent être implémentées une fois que vous aurez terminé celles en vert. Voir plus bas pour des explications complémentaires.
 
 #### Description sommaire des différentes vues
-- La classe `VueDuJeu`, première vue de l'application, présente la vue générale de l'interface graphique. Celle qui vous est donnée ne fait qu'afficher le plateau du jeu, vous allez donc la transformer pour intégrer d'autres éléments, correspondant aux classes décrites ci-dessous.
+- La classe `VueDuJeu`, première vue de l'application, présente la vue générale de l'interface graphique. Celle qui vous est donnée ne fait qu'afficher le plateau du jeu. Vous allez donc la transformer pour intégrer d'autres éléments, correspondant aux classes décrites ci-dessous.
 - La classe `VueDuJoueurCourant` présente les éléments appartenant au joueur courant, actualisés à chaque changement de joueur.
 - La classe `VueAutresJoueurs` présente les éléments des joueurs autres que le joueur courant, en cachant ceux que le joueur courant n'a pas à connaitre.
 - La classe `VuePlateau` présente les routes et les villes sur le plateau, avec lesquelles le joueur pourra interagir afin de jouer son action.
 - La classe `VueCarteTransport` représente la vue d'une unique carte Wagon et la classe `VueDestination` représente la vue d'une unique carte Destination.
 - La classe `VueChoixJoueurs`, qui peut éventuellement être affichée en début de partie, permet de choisir le nombre et les noms des joueurs de la partie.
-- La classe `VueResultats` est affichée en fin de partie, elle affiche les scores de chacun des joueurs ; elle peut éventuellement proposer de rejouer.
-  <br/>En consultant les fichiers de ces classes, vous prendrez connaissance des éléments essentiels à implémenter, auxquels vous avez toute liberté d'ajouter ce qui vous convient.
+- La classe `VueResultats` est affichée en fin de partie, elle affiche les scores de chacun des joueurs et peut éventuellement proposer de rejouer.
+ 
+En consultant le code de ces classes, vous prendrez connaissance des éléments essentiels à implémenter, **auxquels vous avez toute liberté d'ajouter ce qui vous convient**.
 
 ### Organisation interne de l'application
 La classe `RailsIHM` (en rose sur le diagramme de classes) vous est fournie. Elle représente l'`Application` JavaFX et effectue essentiellement plusieurs tâches :
 - Elle crée une partie (objet de type `Jeu`), qui gère la logique interne du jeu et qui s'exécute en réponse aux événements sur l'interface graphique.
 - Elle crée la scène en la construisant avec la première vue, qui est un objet de type `VueDuJeu`.
 - Par défaut, elle crée une partie à 4 joueurs. Si souhaité, vous pourrez faire en sorte qu'elle démarre l'interface graphique sur une fenêtre permettant de saisir le nombre et les noms des joueurs de la partie. Pour cela, quelques modifications de votre part seront nécessaires (voir le [paragraphe correspondant](#ajout-dune-fenêtre-initiale-pour-le-choix-des-joueurs) plus loin).
+
+La classe `RailsIHM` est suffisamment complète et ne nécessite aucune modification de votre part pour faire fonctionner votre programme (du moins dans l'immédiat).
 
 ### Organisation interne des interfaces d'accès à la logique du jeu
 Dans les interfaces qui permettent d'accéder à la logique interne du jeu (en bleu sur le diagramme), vous constaterez que sont d'abord présentées les propriétés du jeu que vous pouvez écouter. Ensuite certains getters et enfin les méthodes que vous pouvez invoquer pour activer la logique interne.
