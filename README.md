@@ -126,7 +126,7 @@ L'intégralité du code source du projet doit résider dans le dépôt GitLab IH
 
 ## Évaluation
 
-L'évaluation de votre code sera faite par l'équipe enseignante et une soutenance du projet aura lieu entre le 12 juin et le 14 juin (date et heure exactes à préciser).  Deux aspects de vos projets seront évalués :
+L'évaluation de votre code sera faite par l'équipe enseignante et une soutenance du projet aura lieu entre le 12 juin et le 14 juin (date et heure exactes à préciser). Deux aspects de vos projets seront évalués :
 * l'implémentation en JavaFX des différents composants et des traitements associés (gestion des événements, propriétés/bindings, l'utilisation des contrôles et des conteneurs JavaFX)
 * l'ergonomie de votre interface graphique
 
