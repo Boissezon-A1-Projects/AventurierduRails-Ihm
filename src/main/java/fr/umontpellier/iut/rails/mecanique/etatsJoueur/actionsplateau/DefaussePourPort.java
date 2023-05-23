@@ -39,7 +39,9 @@ public class DefaussePourPort extends DefausseAvecRestrictionCartes {
 
     @Override
     public void construirePort(String nomPort) {
-        prochainEtat = new ConstructionPort(joueurCourant);
-        prochainEtat.prendreRoute(nomPort);
+        if (joueurCourant.getCartesTransportPosees() != null) {
+            prochainEtat = new ConstructionPort(joueurCourant);
+            prochainEtat.prendreRoute(nomPort);
+        }
     }
 }

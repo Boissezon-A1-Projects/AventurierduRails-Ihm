@@ -38,8 +38,10 @@ public class DefaussePourRoute extends DefausseAvecRestrictionCartes {
     }
 
     public void prendreRoute(String nomRoute) {
-        prochainEtat = new PriseDeRoute(joueurCourant);
-        prochainEtat.prendreRoute(nomRoute);
+        if (joueurCourant.getCartesTransportPosees() != null) {
+            prochainEtat = new PriseDeRoute(joueurCourant);
+            prochainEtat.prendreRoute(nomRoute);
+        }
     }
 
 }
