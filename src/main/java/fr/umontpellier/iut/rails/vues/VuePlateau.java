@@ -1,7 +1,13 @@
 package fr.umontpellier.iut.rails.vues;
 
+import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.IRoute;
+import fr.umontpellier.iut.rails.IVille;
+import fr.umontpellier.iut.rails.mecanique.Route;
+import fr.umontpellier.iut.rails.mecanique.data.Ville;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,11 +46,26 @@ public class VuePlateau extends Pane {
     }
 
     EventHandler<MouseEvent> choixRoute = event -> {
-        System.out.println("On a cliqué sur une route");
+        IRoute route = (Route) event.getSource();
+        ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(route.getNom());
+        route.proprietaireProperty().addListener(new ChangeListener<IJoueur>() {
+            @Override
+            public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur t1) {
+
+                //récupérer les rectangles de la route pour les changer de couleurs
+            }
+        });
     };
 
     EventHandler<MouseEvent> choixPort = event -> {
-        System.out.println("On a cliqué sur un port");
+        IVille ville = (Ville) event.getSource();
+        ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(ville.getNom());
+        /*ville.proprietaireProperty().addListener(new ChangeListener<IJoueur>() {
+            @Override
+            public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur t1) {
+                // récupérer le cercle du port pour el changer de couleurs
+            }
+        });*/
     };
 
     public void creerBindings() {
