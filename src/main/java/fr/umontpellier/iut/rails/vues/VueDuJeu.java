@@ -9,6 +9,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -63,6 +64,9 @@ public class VueDuJeu extends BorderPane {
         fieldNbPions.setVisible(false); fieldNbPions.setDisable(true);
         centre.getChildren().addAll(instruction, destinations ,fieldNbPions,passer);
         setCenter(centre);
+        destinations.setAlignment(Pos.CENTER);
+        fieldNbPions.setPrefSize(15,10);
+        centre.setAlignment(Pos.CENTER);
 
         // Instancie les vues de joueurs
         vueJoueurCourant = new VueJoueurCourant();
@@ -98,10 +102,11 @@ public class VueDuJeu extends BorderPane {
         public void handle(KeyEvent keyEvent) {
             if( keyEvent.getCode().equals(KeyCode.ENTER)) {
                 if(Integer.valueOf(fieldNbPions.getText()) <= 25 && Integer.valueOf(fieldNbPions.getText()) >= 10) {
-                    System.out.println("qziudhaziudhzqiudhqiudhiquzdhiquzhdiquzhdiquzdhiquzdqizuhd");
+
                     jeu.leNombreDePionsSouhaiteAEteRenseigne(fieldNbPions.getText());
                     fieldNbPions.setVisible(false);
                     fieldNbPions.setDisable(true);
+                    passer.setDisable(false);
                 }
             }
         }
@@ -113,6 +118,7 @@ public class VueDuJeu extends BorderPane {
             if(t1.equals("Saisissez un nombre de pions wagon entre 10 et 25")){
                 fieldNbPions.setDisable(false);
                 fieldNbPions.setVisible(true);
+                passer.setDisable(true);
             }
         }
     };
@@ -120,7 +126,7 @@ public class VueDuJeu extends BorderPane {
     ChangeListener<Boolean> estEnPreparation = new ChangeListener<Boolean>() {
         @Override
         public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-            HBox nvCentre = new HBox();
+            VBox nvCentre = new VBox();
             nvCentre.getChildren().addAll(instruction,plateau);
             setCenter(nvCentre);
             plateau.creerBindings();

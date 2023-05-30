@@ -1,6 +1,7 @@
 package fr.umontpellier.iut.rails;
 
 import fr.umontpellier.iut.rails.mecanique.data.Couleur;
+import javafx.scene.control.Label;
 
 import java.util.List;
 import java.util.Objects;

@@ -91,6 +91,10 @@ public class Jeu implements IJeu {
     public ObjectProperty<IJoueur> joueurCourantProperty() {
         return joueurCourant;
     }
+
+
+
+
     @Override
     public ObjectProperty<String> instructionProperty() {
         return instruction;

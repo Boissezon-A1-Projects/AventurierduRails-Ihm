@@ -6,6 +6,7 @@ import fr.umontpellier.iut.rails.IVille;
 import fr.umontpellier.iut.rails.mecanique.Route;
 import fr.umontpellier.iut.rails.mecanique.data.Ville;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -46,26 +47,16 @@ public class VuePlateau extends Pane {
     }
 
     EventHandler<MouseEvent> choixRoute = event -> {
-        IRoute route = (Route) event.getSource();
-        ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(route.getNom());
-        route.proprietaireProperty().addListener(new ChangeListener<IJoueur>() {
-            @Override
-            public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur t1) {
+        Rectangle r = (Rectangle) event.getSource();
+        ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(r.getId());
 
-                //récupérer les rectangles de la route pour les changer de couleurs
-            }
-        });
+
     };
 
     EventHandler<MouseEvent> choixPort = event -> {
-        IVille ville = (Ville) event.getSource();
-        ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(ville.getNom());
-        /*ville.proprietaireProperty().addListener(new ChangeListener<IJoueur>() {
-            @Override
-            public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur t1) {
-                // récupérer le cercle du port pour el changer de couleurs
-            }
-        });*/
+        Circle ville = (Circle) event.getSource();
+        ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(ville.getId());
+
     };
 
     public void creerBindings() {

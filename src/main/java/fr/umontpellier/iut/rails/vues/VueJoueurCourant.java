@@ -4,9 +4,14 @@ import fr.umontpellier.iut.rails.ICarteTransport;
 import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.IRoute;
+import fr.umontpellier.iut.rails.mecanique.data.CarteTransport;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -27,47 +32,72 @@ public class VueJoueurCourant extends VBox {
         cartesTransportBox = new VBox();
         destinationsBox = new HBox();
         getChildren().addAll(nomJoueur, destinationsBox,cartesTransportBox);
+
     }
+
+    /*ListChangeListener<ICarteTransport> listenerCarteJoueur = new ListChangeListener<ICarteTransport>() {
+        @Override
+        public void onChanged(Change<? extends ICarteTransport> change) {
+            while(change.next()){
+                if(change.wasRemoved()){
+                    for (ICarteTransport carte: change.getRemoved()) {
+
+                    }
+                }
+            }
+        }
+    };*/
+
+   /* ListChangeListener<CarteTransport> listenerCarteTransportPosee = new ListChangeListener<CarteTransport>() {
+        @Override
+        public void onChanged(Change<? extends CarteTransport> change) {
+            while(change.next()){
+                if(change.wasAdded()){
+                    for (CarteTransport carte : change.getAddedSubList() ) {
+
+                    }
+                }
+            }
+        }
+    }*/
+
+
+    EventHandler<MouseEvent> eventCartesQueQuandCarteCHoisie = mouseEvent -> {
+        VueCarteTransport carte = (VueCarteTransport) mouseEvent.getSource();
+        ((VueDuJeu) getScene().getRoot()).getJeu().uneCarteDuJoueurEstJouee(carte.getCarteTransport());
+        cartesTransportBox.getChildren().remove(carte);
+
+
+    };
+
 
     ChangeListener<IJoueur> listenerJoueurCourant = new ChangeListener<IJoueur>() {
         @Override
         public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur ancienJoueur, IJoueur joueurCourant) {
+
             destinationsBox.getChildren().clear();
             for (IDestination d : joueurCourant.getDestinations()) {
                 Label v = new Label(d.getVilles().toString());
                 destinationsBox.getChildren().add(v);
             }
-
-
             nomJoueur.setText("Joueur Courant: " +joueurCourant.getNom());
             cartesTransportBox.getChildren().clear();
-            for (ICarteTransport carteTransport : joueurCourant.getCartesTransport()) {
-                StringBuffer  nomCarte = new StringBuffer();
-                nomCarte.append("carte-");
-                if(carteTransport.estBateau()){
-                    nomCarte.append("BATEAU-");
-                } else if (carteTransport.estDouble()) {
-                    nomCarte.append("DOUBLE-");
-                }else{
-                    nomCarte.append("WAGON-");
-                }
-                nomCarte.append(carteTransport.getStringCouleur());
-                if(carteTransport.getAncre()){
-                    nomCarte.append("-A");
-                }
-                Label carteenmain = new Label(nomCarte.toString());
+
+            for (ICarteTransport carteTransport : joueurCourant.getCartesTransport()  ) {
+
+                VueCarteTransport carteenmain = new VueCarteTransport(carteTransport,1);
                 cartesTransportBox.getChildren().add(carteenmain);
+                carteenmain.addEventHandler(MouseEvent.MOUSE_CLICKED, eventCartesQueQuandCarteCHoisie);
             }
-            /*for (IRoute route: joueurCourant. ) {
-
-            }*/
-
-
+            /*joueurCourant.cartesTransportProperty().addListener(listenerCarteJoueur);
+            joueurCourant.cartesTransportPoseesProperty().addListener(listenerCarteTransportPosee);*/
         }
     };
 
     public void creerBindings(){
         ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().addListener(listenerJoueurCourant);
+
+
     }
 
 }
