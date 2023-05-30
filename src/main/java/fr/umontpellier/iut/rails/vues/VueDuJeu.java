@@ -12,6 +12,9 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -47,6 +50,7 @@ public class VueDuJeu extends BorderPane {
     private Label instruction;
 
     private VBox destinations;
+    private TextField fieldNbPions;
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
@@ -55,6 +59,10 @@ public class VueDuJeu extends BorderPane {
         passer = new Button("Passer");
         instruction = new Label();
         destinations = new VBox();
+        fieldNbPions = new TextField();
+        fieldNbPions.setVisible(false); fieldNbPions.setDisable(true);
+        centre.getChildren().addAll(instruction, destinations ,fieldNbPions,passer);
+        setCenter(centre);
 
         // Instancie les vues de joueurs
         vueJoueurCourant = new VueJoueurCourant();
@@ -62,8 +70,7 @@ public class VueDuJeu extends BorderPane {
         vueJoueurGauche = new VueAutresJoueursGauche();
         vueJoueurHaut = new VueAutresJoueursHaut();
 
-        centre.getChildren().addAll(instruction, destinations ,passer);
-        setCenter(centre);
+
         VBox bas = new VBox();
         bas.getChildren().add(vueJoueurCourant);
 
@@ -83,6 +90,30 @@ public class VueDuJeu extends BorderPane {
             VueDestination v = (VueDestination) mouseEvent.getSource();
             destinations.getChildren().remove(v);
             jeu.uneDestinationAEteChoisie(v.getDestination());
+        }
+    };
+
+    EventHandler<KeyEvent> nbPionsAEteChoisi = new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(KeyEvent keyEvent) {
+            if( keyEvent.getCode().equals(KeyCode.ENTER)) {
+                if(Integer.valueOf(fieldNbPions.getText()) <= 25 && Integer.valueOf(fieldNbPions.getText()) >= 10) {
+                    System.out.println("qziudhaziudhzqiudhqiudhiquzdhiquzhdiquzhdiquzdhiquzdqizuhd");
+                    jeu.leNombreDePionsSouhaiteAEteRenseigne(fieldNbPions.getText());
+                    fieldNbPions.setVisible(false);
+                    fieldNbPions.setDisable(true);
+                }
+            }
+        }
+    };
+
+    ChangeListener<String> instructionChange = new ChangeListener<String>() {
+        @Override
+        public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+            if(t1.equals("Saisissez un nombre de pions wagon entre 10 et 25")){
+                fieldNbPions.setDisable(false);
+                fieldNbPions.setVisible(true);
+            }
         }
     };
 
@@ -135,7 +166,8 @@ public class VueDuJeu extends BorderPane {
         instruction.textProperty().bind(jeu.instructionProperty());
         vueJoueurCourant.creerBindings();
         jeu.jeuEnPreparationProperty().addListener(estEnPreparation);
-
+        instruction.textProperty().addListener(instructionChange);
+        fieldNbPions.addEventHandler(KeyEvent.KEY_PRESSED, nbPionsAEteChoisi);
     }
 
     public IJeu getJeu() {
