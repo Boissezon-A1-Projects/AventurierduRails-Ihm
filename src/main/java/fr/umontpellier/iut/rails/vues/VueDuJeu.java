@@ -67,7 +67,8 @@ public class VueDuJeu extends BorderPane {
         centre.getChildren().addAll(instruction, destinations ,fieldNbPions,passer);
         setCenter(centre);
         destinations.setAlignment(Pos.CENTER);
-        fieldNbPions.setPrefSize(15,10);
+        fieldNbPions.setMinSize(50,25);
+        fieldNbPions.setMaxSize(50,25);
         centre.setAlignment(Pos.CENTER);
 
         // Instancie les vues de joueurs

@@ -3,9 +3,12 @@ package fr.umontpellier.iut.rails.vues;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.IRoute;
 import fr.umontpellier.iut.rails.IVille;
+import fr.umontpellier.iut.rails.mecanique.Joueur;
 import fr.umontpellier.iut.rails.mecanique.Route;
 import fr.umontpellier.iut.rails.mecanique.data.Ville;
+import javafx.beans.InvalidationListener;
 import javafx.beans.binding.DoubleBinding;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -15,6 +18,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
@@ -34,6 +38,10 @@ public class VuePlateau extends Pane {
     @FXML
     private ImageView mapMonde;
 
+    private StringBinding couleurProprio;
+
+    private ChangeListener<IJoueur> changeDeProprietaire;
+
     public VuePlateau() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("fxml/plateau.fxml"));
@@ -49,7 +57,15 @@ public class VuePlateau extends Pane {
     EventHandler<MouseEvent> choixRoute = event -> {
         Rectangle r = (Rectangle) event.getSource();
         ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(r.getId());
-
+        ajouterRoutes();
+//        for (DonneesGraphiques.DonneesSegments s: DonneesGraphiques.routes.get(r.getId())) {
+//            System.out.println(s);
+//            Rectangle rectangleSegment = new Rectangle(s.getXHautGauche(), s.getYHautGauche(), DonneesGraphiques.largeurRectangle, DonneesGraphiques.hauteurRectangle);
+//            rectangleSegment.setRotate(s.getAngle());
+//            rectangleSegment.setFill(Paint.valueOf("#FFFFFF"));
+//            bindRectangle(rectangleSegment, s.getXHautGauche(), s.getYHautGauche());
+//
+//        }
 
     };
 
@@ -76,11 +92,19 @@ public class VuePlateau extends Pane {
         }
     }
 
+
+
+
+
+
     private void ajouterRoutes() {
         List<? extends IRoute> listeRoutes = ((VueDuJeu) getScene().getRoot()).getJeu().getRoutes();
         for (String nomRoute : DonneesGraphiques.routes.keySet()) {
             ArrayList<DonneesGraphiques.DonneesSegments> segmentsRoute = DonneesGraphiques.routes.get(nomRoute);
             IRoute route = listeRoutes.stream().filter(r -> r.getNom().equals(nomRoute)).findAny().orElse(null);
+
+            /*route.proprietaireProperty().addListener(changeDeProprietaire);*/
+
             for (DonneesGraphiques.DonneesSegments unSegment : segmentsRoute) {
                 Rectangle rectangleSegment = new Rectangle(unSegment.getXHautGauche(), unSegment.getYHautGauche(), DonneesGraphiques.largeurRectangle, DonneesGraphiques.hauteurRectangle);
                 rectangleSegment.setId(nomRoute);
@@ -88,9 +112,27 @@ public class VuePlateau extends Pane {
                 getChildren().add(rectangleSegment);
                 rectangleSegment.setOnMouseClicked(choixRoute);
                 bindRectangle(rectangleSegment, unSegment.getXHautGauche(), unSegment.getYHautGauche());
+                /*changeDeProprietaire = (observableValue, iJoueur, proprio) -> {
+                    if(proprio.getCouleur().equals(IJoueur.CouleurJoueur.JAUNE)){
+                        rectangleSegment.setStyle("-fx-background-color:  #e9d460");
+                    } else if (proprio.getCouleur().equals(IJoueur.CouleurJoueur.BLEU)) {
+                        rectangleSegment.setStyle("-fx-background-color: #60c4e9");
+                    } else if (proprio.getCouleur().equals(IJoueur.CouleurJoueur.ROUGE)) {
+                        rectangleSegment.setStyle("-fx-background-color: #e96060");
+                    }else if (proprio.getCouleur().equals(IJoueur.CouleurJoueur.VERT)) {
+                        rectangleSegment.setStyle("-fx-background-color: #60e96c");
+                    }else{
+                        rectangleSegment.setStyle("-fx-background-color: #e960d8");
+                    }
+
+
+                };*/
             }
         }
     }
+
+
+
 
     private void bindRedimensionEtCentragePlateau() {
         mapMonde.fitWidthProperty().bind(widthProperty());
