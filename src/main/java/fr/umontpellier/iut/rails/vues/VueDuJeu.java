@@ -2,6 +2,8 @@ package fr.umontpellier.iut.rails.vues;
 
 import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJeu;
+import fr.umontpellier.iut.rails.IJoueur;
+import fr.umontpellier.iut.rails.mecanique.Joueur;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.value.ChangeListener;
@@ -88,6 +90,25 @@ public class VueDuJeu extends BorderPane {
         plateau.setDisable(false);
     }
 
+    ChangeListener<IJoueur> changeCourant = new ChangeListener<IJoueur>() {
+        @Override
+        public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur joueurCourant) {
+            List<IJoueur> list = (List<IJoueur>) ((VueDuJeu) getScene().getRoot()).getJeu().getJoueurs();
+            int compteur =0;
+            for (IJoueur joueur : list) {
+                if(!joueur.equals(joueurCourant)){
+                    if(compteur==0){
+                        vueJoueurGauche.setUp(joueur);
+                    }else if(compteur==1){
+                        vueJoueurDroite.setUp(joueur);
+                    }else{
+                        vueJoueurHaut.setUp(joueur);
+                    }
+                    compteur++;
+                }
+            }
+        }
+    };
     EventHandler<MouseEvent> actionBoutonDestination = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -174,6 +195,7 @@ public class VueDuJeu extends BorderPane {
         jeu.jeuEnPreparationProperty().addListener(estEnPreparation);
         instruction.textProperty().addListener(instructionChange);
         fieldNbPions.addEventHandler(KeyEvent.KEY_PRESSED, nbPionsAEteChoisi);
+        jeu.joueurCourantProperty().addListener(changeCourant);
     }
 
     public IJeu getJeu() {

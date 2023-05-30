@@ -29,36 +29,33 @@ public class VueAutresJoueursHaut extends VBox {
         getChildren().addAll(nomJoueur, destinations, cartesTransport);
     }
 
-    ChangeListener<IJoueur> listenerAutresJoueurs = new ChangeListener<IJoueur>() {
-        @Override
-        public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur ancien, IJoueur nouveau){
-            destinations.getChildren().clear();
-            for (IDestination d : nouveau.getDestinations()) {
-                Label v = new Label(d.getVilles().toString());
-                destinations.getChildren().add(v);
-            }
-
-            nomJoueur.setText("Jouera dans 2 tours : " + nouveau.getNom());
-            cartesTransport.getChildren().clear();
-            for (ICarteTransport carteTransport : nouveau.getCartesTransport()) {
-                StringBuffer  nomCarte = new StringBuffer();
-                nomCarte.append("carte-");
-                if(carteTransport.estBateau()){
-                    nomCarte.append("BATEAU-");
-                } else if (carteTransport.estDouble()) {
-                    nomCarte.append("DOUBLE-");
-                }else{
-                    nomCarte.append("WAGON-");
-                }
-                nomCarte.append(carteTransport.getStringCouleur());
-                if(carteTransport.getAncre()){
-                    nomCarte.append("-A");
-                }
-                Label carteenmain = new Label(nomCarte.toString());
-                cartesTransport.getChildren().add(carteenmain);
-            }
+    public void setUp(IJoueur joueur){
+        destinations.getChildren().clear();
+        for (IDestination d : joueur.getDestinations()) {
+            Label v = new Label(d.getVilles().toString());
+            destinations.getChildren().add(v);
         }
-    };
+
+        nomJoueur.setText("Jouera dans 2 tours : " + joueur.getNom());
+        cartesTransport.getChildren().clear();
+        for (ICarteTransport carteTransport : joueur.getCartesTransport()) {
+            StringBuffer  nomCarte = new StringBuffer();
+            nomCarte.append("carte-");
+            if(carteTransport.estBateau()){
+                nomCarte.append("BATEAU-");
+            } else if (carteTransport.estDouble()) {
+                nomCarte.append("DOUBLE-");
+            }else{
+                nomCarte.append("WAGON-");
+            }
+            nomCarte.append(carteTransport.getStringCouleur());
+            if(carteTransport.getAncre()){
+                nomCarte.append("-A");
+            }
+            Label carteenmain = new Label(nomCarte.toString());
+            cartesTransport.getChildren().add(carteenmain);
+        }
+    }
 }
 
 

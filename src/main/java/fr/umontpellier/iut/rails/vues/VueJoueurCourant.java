@@ -15,6 +15,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.util.List;
+
 /**
  * Cette classe présente les éléments appartenant au joueur courant.
  *
@@ -27,7 +29,9 @@ public class VueJoueurCourant extends VBox {
 
     private HBox destinationsBox;
 
+
     public VueJoueurCourant(){
+
         nomJoueur =new Label();
         cartesTransportBox = new VBox();
         destinationsBox = new HBox();
@@ -91,7 +95,11 @@ public class VueJoueurCourant extends VBox {
             }
             /*joueurCourant.cartesTransportProperty().addListener(listenerCarteJoueur);
             joueurCourant.cartesTransportPoseesProperty().addListener(listenerCarteTransportPosee);*/
+
+
         }
+
+
     };
 
     public void creerBindings(){
