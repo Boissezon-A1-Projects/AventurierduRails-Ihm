@@ -51,7 +51,7 @@ public class VueDuJeu extends BorderPane {
     private Button passer;
 
     private Label instruction;
-
+    private VBox bas;
     private VBox destinations;
     private TextField fieldNbPions;
 
@@ -75,16 +75,14 @@ public class VueDuJeu extends BorderPane {
         vueJoueurDroite = new VueAutresJoueursDroite();
         vueJoueurGauche = new VueAutresJoueursGauche();
         vueJoueurHaut = new VueAutresJoueursHaut();
+        bas =new VBox();
+        bas.getChildren().addAll(vueJoueurCourant);
+        setBottom(bas);
 
 
-        VBox bas = new VBox();
-        bas.getChildren().add(vueJoueurCourant);
 
         // Place les vues des joueurs
-        setBottom(bas);
-        setTop(vueJoueurHaut);
-        setRight(vueJoueurDroite);
-        setLeft(vueJoueurGauche);
+
 
         plateau.setVisible(true);
         plateau.setDisable(false);
@@ -151,6 +149,10 @@ public class VueDuJeu extends BorderPane {
             nvCentre.getChildren().addAll(instruction,plateau);
             setCenter(nvCentre);
             plateau.creerBindings();
+            bas.getChildren().add(passer);
+            setTop(vueJoueurHaut);
+            setRight(vueJoueurDroite);
+            setLeft(vueJoueurGauche);
         }
     };
     ListChangeListener<IDestination> lesDestinationsInitialesChangent = new ListChangeListener<IDestination>() {
