@@ -27,7 +27,6 @@ public class VueJoueurCourant extends VBox {
         cartesTransportBox = new VBox();
         destinationsBox = new HBox();
         getChildren().addAll(nomJoueur, destinationsBox,cartesTransportBox);
-
     }
 
     ChangeListener<IJoueur> listenerJoueurCourant = new ChangeListener<IJoueur>() {
@@ -38,9 +37,11 @@ public class VueJoueurCourant extends VBox {
                 Label v = new Label(d.getVilles().toString());
                 destinationsBox.getChildren().add(v);
             }
+
+
             nomJoueur.setText("Joueur Courant: " +joueurCourant.getNom());
             cartesTransportBox.getChildren().clear();
-            for (ICarteTransport carteTransport : joueurCourant.getCartesTransport()  ) {
+            for (ICarteTransport carteTransport : joueurCourant.getCartesTransport()) {
                 StringBuffer  nomCarte = new StringBuffer();
                 nomCarte.append("carte-");
                 if(carteTransport.estBateau()){

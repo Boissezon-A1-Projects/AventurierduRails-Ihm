@@ -36,6 +36,12 @@ public class VueDuJeu extends BorderPane {
 
     private VueJoueurCourant vueJoueurCourant;
 
+    private VueAutresJoueursGauche vueJoueurGauche;
+
+    private VueAutresJoueursDroite vueJoueurDroite;
+
+    private VueAutresJoueursHaut vueJoueurHaut;
+
     private Button passer;
 
     private Label instruction;
@@ -49,12 +55,24 @@ public class VueDuJeu extends BorderPane {
         passer = new Button("Passer");
         instruction = new Label();
         destinations = new VBox();
+
+        // Instancie les vues de joueurs
         vueJoueurCourant = new VueJoueurCourant();
+        vueJoueurDroite = new VueAutresJoueursDroite();
+        vueJoueurGauche = new VueAutresJoueursGauche();
+        vueJoueurHaut = new VueAutresJoueursHaut();
+
         centre.getChildren().addAll(instruction, destinations ,passer);
         setCenter(centre);
         VBox bas = new VBox();
         bas.getChildren().add(vueJoueurCourant);
+
+        // Place les vues des joueurs
         setBottom(bas);
+        setTop(vueJoueurHaut);
+        setRight(vueJoueurDroite);
+        setLeft(vueJoueurGauche);
+
         plateau.setVisible(true);
         plateau.setDisable(false);
     }
