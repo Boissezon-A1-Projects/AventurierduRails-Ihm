@@ -1,5 +1,6 @@
 package fr.umontpellier.iut.rails.vues;
 
+import fr.umontpellier.iut.rails.ICarteTransport;
 import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJeu;
 import fr.umontpellier.iut.rails.IJoueur;
@@ -11,11 +12,13 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -55,6 +58,17 @@ public class VueDuJeu extends BorderPane {
     private VBox destinations;
     private TextField fieldNbPions;
 
+
+    private Label piocheWagon;
+    private Label piocheBateau;
+    private Label piocheDestination;
+
+    private VBox cartesVisibles;
+
+    private Label boutonsWagons;
+    private Label boutonsBateaux;
+
+
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
         VBox centre = new VBox();
@@ -80,6 +94,20 @@ public class VueDuJeu extends BorderPane {
         bas.getChildren().addAll(vueJoueurCourant);
         setBottom(bas);
 
+        //choses pour plus tard
+        ImageView imageBateauPioche = new ImageView("images/cartesWagons/dos-BATEAU.png");
+        imageBateauPioche.setFitWidth(100); imageBateauPioche.setFitHeight(160);
+        piocheBateau = new Label(); piocheBateau.setGraphic(imageBateauPioche);
+        ImageView imageWagonPioche =new ImageView("images/cartesWagons/dos-WAGON.png") ;
+        imageWagonPioche.setFitWidth(100); imageWagonPioche.setFitHeight(160);
+        piocheWagon = new Label(); piocheWagon.setGraphic(imageWagonPioche);
+        ImageView imageDestiPioche = new ImageView("images/cartesWagons/destinations.png");
+        imageDestiPioche.setFitWidth(215); imageDestiPioche.setFitHeight(135);
+
+        piocheDestination = new Label(); piocheDestination.setGraphic(imageDestiPioche);
+
+        cartesVisibles = new VBox();
+        cartesVisibles.setSpacing(-50);
 
 
         // Place les vues des joueurs
@@ -89,6 +117,8 @@ public class VueDuJeu extends BorderPane {
         plateau.setDisable(false);
     }
 
+
+    //change les vues des joueurs
     ChangeListener<IJoueur> changeCourant = new ChangeListener<IJoueur>() {
         @Override
         public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur joueurCourant) {
@@ -108,6 +138,8 @@ public class VueDuJeu extends BorderPane {
             }
         }
     };
+
+    //pour prendre des destination
     EventHandler<MouseEvent> actionBoutonDestination = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
@@ -117,6 +149,8 @@ public class VueDuJeu extends BorderPane {
         }
     };
 
+
+    //pions choisi lors de la phase preparation
     EventHandler<KeyEvent> nbPionsAEteChoisi = new EventHandler<KeyEvent>() {
         @Override
         public void handle(KeyEvent keyEvent) {
@@ -132,6 +166,8 @@ public class VueDuJeu extends BorderPane {
         }
     };
 
+
+    //changer le label instruction
     ChangeListener<String> instructionChange = new ChangeListener<String>() {
         @Override
         public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -143,19 +179,40 @@ public class VueDuJeu extends BorderPane {
         }
     };
 
+
+
+    //change la scene quand plus en preparation
     ChangeListener<Boolean> estEnPreparation = new ChangeListener<Boolean>() {
         @Override
         public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
             VBox nvCentre = new VBox();
-            nvCentre.getChildren().addAll(instruction,plateau);
+            HBox plateauEtPioches = new HBox();
+            nvCentre.setPadding(new Insets(10));
+
+            plateauEtPioches.setSpacing(15);
+            VBox pioches = new VBox();
+            HBox wagonsETBateauxPioches = new HBox();
+            wagonsETBateauxPioches.getChildren().addAll(piocheWagon,piocheBateau); wagonsETBateauxPioches.setSpacing(15);
+            pioches.setSpacing(10);
+            pioches.getChildren().addAll(wagonsETBateauxPioches,piocheDestination, cartesVisibles);
+            plateauEtPioches.getChildren().addAll(plateau, pioches);
+            nvCentre.getChildren().addAll(instruction,plateauEtPioches);
             setCenter(nvCentre);
             plateau.creerBindings();
-            bas.getChildren().add(passer);
+            HBox nvBas = new HBox();
+            VBox boutonPasser= new VBox(); boutonPasser.getChildren().add(passer);
+
+            nvBas.getChildren().addAll(vueJoueurCourant,boutonPasser);
+            nvBas.setAlignment(Pos.CENTER);
             setTop(vueJoueurHaut);
             setRight(vueJoueurDroite);
             setLeft(vueJoueurGauche);
+            setBottom(nvBas);
+
         }
     };
+
+    //pour changer les destinations lors de la phase de prepa
     ListChangeListener<IDestination> lesDestinationsInitialesChangent = new ListChangeListener<IDestination>() {
         @Override
         public void onChanged(Change<? extends IDestination> change) {
@@ -178,6 +235,7 @@ public class VueDuJeu extends BorderPane {
         }
     };
 
+    //trouver la desti a partir de label
     public VueDestination trouverLabelDansDestinations(List<Node> conteneur, IDestination desti){
         for (Node n: conteneur) {
             VueDestination l = (VueDestination) n;
@@ -187,6 +245,53 @@ public class VueDuJeu extends BorderPane {
         }
         return  null;
     }
+
+    EventHandler<MouseEvent> carteVisiblesClickée = mouseEvent -> {
+        VueCarteTransport v = (VueCarteTransport) mouseEvent.getSource();
+        System.out.println("aaaa");
+        cartesVisibles.getChildren().remove(v);
+        getJeu().uneCarteTransportAEteChoisie(v.getCarteTransport());
+    };
+
+    ListChangeListener<ICarteTransport> lesCartesVisiblesChangent = new ListChangeListener<ICarteTransport>() {
+        @Override
+        public void onChanged(Change<? extends ICarteTransport> change) {
+            while (change.next()){
+                if(change.wasAdded()){
+                    for (ICarteTransport carteVisibles: change.getAddedSubList()) {
+                        VueCarteTransport v = new VueCarteTransport(carteVisibles,1,90,126);
+                        cartesVisibles.getChildren().add(v);
+                        v.addEventHandler(MouseEvent.MOUSE_CLICKED,carteVisiblesClickée);
+                    }
+                }
+
+            }
+        }
+    };
+
+
+    EventHandler<MouseEvent> piocheWagonsClickée = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            jeu.uneCarteWagonAEtePiochee();
+        }
+    };
+
+    EventHandler<MouseEvent> piocheBateauClickée = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            jeu.uneCarteBateauAEtePiochee();
+        }
+    };
+
+    EventHandler<MouseEvent> piocheDestiClickée = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            jeu.nouvelleDestinationDemandee();
+        }
+    };
+
+
 
     public void creerBindings() {
         plateau.prefWidthProperty().bind(getScene().widthProperty());
@@ -199,6 +304,13 @@ public class VueDuJeu extends BorderPane {
         instruction.textProperty().addListener(instructionChange);
         fieldNbPions.addEventHandler(KeyEvent.KEY_PRESSED, nbPionsAEteChoisi);
         jeu.joueurCourantProperty().addListener(changeCourant);
+        piocheDestination.addEventHandler(MouseEvent.MOUSE_CLICKED, piocheDestiClickée);
+        piocheWagon.addEventHandler(MouseEvent.MOUSE_CLICKED, piocheWagonsClickée);
+        piocheBateau.addEventHandler(MouseEvent.MOUSE_CLICKED, piocheBateauClickée);
+        piocheDestination.disableProperty().bind(jeu.piocheDestinationVideProperty());
+        piocheBateau.disableProperty().bind(jeu.piocheBateauVideProperty());
+        piocheWagon.disableProperty().bind(jeu.piocheWagonVideProperty());
+        jeu.cartesTransportVisiblesProperty().addListener(lesCartesVisiblesChangent);
     }
 
     public IJeu getJeu() {

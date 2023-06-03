@@ -14,7 +14,7 @@ public class VueCarteTransport extends Label {
 
     private final ICarteTransport carteTransport;
 
-    public VueCarteTransport(ICarteTransport carteTransport, int nbCartes) {
+    public VueCarteTransport(ICarteTransport carteTransport, int nbCartes, double hauteur, double largeur) {
         this.carteTransport = carteTransport;
         StringBuffer  nomCarte = new StringBuffer();
         nomCarte.append("carte-");
@@ -22,6 +22,8 @@ public class VueCarteTransport extends Label {
             nomCarte.append("BATEAU-");
         } else if (this.carteTransport.estDouble()) {
             nomCarte.append("DOUBLE-");
+        }else if (carteTransport.estJoker()) {
+            nomCarte.append("JOKER-");
         }else{
             nomCarte.append("WAGON-");
         }
@@ -29,9 +31,9 @@ public class VueCarteTransport extends Label {
         if(this.carteTransport.getAncre()){
             nomCarte.append("-A");
         }
-        ImageView v = new ImageView("images/cartesWagons/"+nomCarte.toString()+".png");
-
-        this.setGraphic(v);
+        ImageView imageCarte = new ImageView("images/cartesWagons/"+nomCarte+".png");
+        imageCarte.setFitHeight(hauteur); imageCarte.setFitWidth(largeur);
+        this.setGraphic(imageCarte);
     }
 
     public ICarteTransport getCarteTransport() {

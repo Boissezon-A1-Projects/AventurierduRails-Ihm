@@ -5,6 +5,7 @@ import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJoueur;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -19,14 +20,14 @@ import javafx.scene.layout.VBox;
  */
 public class VueAutresJoueursDroite extends VBox {
     private Label nomJoueur;
-    private HBox destinations;
-    private VBox cartesTransport;
-
+    private VBox destinations;
     public VueAutresJoueursDroite(){
         nomJoueur = new Label();
-        cartesTransport = new VBox();
-        destinations = new HBox();
-        getChildren().addAll(nomJoueur, destinations, cartesTransport);
+
+        destinations = new VBox();
+        getChildren().addAll(nomJoueur, destinations);
+        setAlignment(Pos.CENTER);
+        setMaxWidth(100);
     }
 
     public void setUp(IJoueur joueur){
@@ -37,23 +38,16 @@ public class VueAutresJoueursDroite extends VBox {
         }
 
         nomJoueur.setText("Jouera dans 3 tours : " + joueur.getNom());
-        cartesTransport.getChildren().clear();
-        for (ICarteTransport carteTransport : joueur.getCartesTransport()) {
-            StringBuffer  nomCarte = new StringBuffer();
-            nomCarte.append("carte-");
-            if(carteTransport.estBateau()){
-                nomCarte.append("BATEAU-");
-            } else if (carteTransport.estDouble()) {
-                nomCarte.append("DOUBLE-");
-            }else{
-                nomCarte.append("WAGON-");
-            }
-            nomCarte.append(carteTransport.getStringCouleur());
-            if(carteTransport.getAncre()){
-                nomCarte.append("-A");
-            }
-            Label carteenmain = new Label(nomCarte.toString());
-            cartesTransport.getChildren().add(carteenmain);
+        if(joueur.getCouleur().equals(IJoueur.CouleurJoueur.JAUNE)){
+            setStyle("-fx-background-color:  #e9d460");
+        } else if (joueur.getCouleur().equals(IJoueur.CouleurJoueur.BLEU)) {
+            setStyle("-fx-background-color: #60c4e9");
+        } else if (joueur.getCouleur().equals(IJoueur.CouleurJoueur.ROUGE)) {
+            setStyle("-fx-background-color: #e96060");
+        }else if (joueur.getCouleur().equals(IJoueur.CouleurJoueur.VERT)) {
+            setStyle("-fx-background-color: #60e96c");
+        }else{
+            setStyle("-fx-background-color: #e960d8");
         }
     }
 }

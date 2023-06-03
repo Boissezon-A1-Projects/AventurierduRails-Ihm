@@ -1,5 +1,6 @@
 package fr.umontpellier.iut.rails.vues;
 
+import fr.umontpellier.iut.rails.ICarteTransport;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.IRoute;
 import fr.umontpellier.iut.rails.IVille;
@@ -58,6 +59,7 @@ public class VuePlateau extends Pane {
         Rectangle r = (Rectangle) event.getSource();
         ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(r.getId());
         ajouterRoutes();
+
 //        for (DonneesGraphiques.DonneesSegments s: DonneesGraphiques.routes.get(r.getId())) {
 //            System.out.println(s);
 //            Rectangle rectangleSegment = new Rectangle(s.getXHautGauche(), s.getYHautGauche(), DonneesGraphiques.largeurRectangle, DonneesGraphiques.hauteurRectangle);
@@ -66,6 +68,7 @@ public class VuePlateau extends Pane {
 //            bindRectangle(rectangleSegment, s.getXHautGauche(), s.getYHautGauche());
 //
 //        }
+
 
     };
 
