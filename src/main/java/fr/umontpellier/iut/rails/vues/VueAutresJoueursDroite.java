@@ -37,7 +37,7 @@ public class VueAutresJoueursDroite extends VBox {
             destinations.getChildren().add(v);
         }
 
-        nomJoueur.setText("Jouera dans 3 tours : " + joueur.getNom());
+        nomJoueur.setText("Prochain joueur: " + joueur.getNom());
         if(joueur.getCouleur().equals(IJoueur.CouleurJoueur.JAUNE)){
             setStyle("-fx-background-color:  #e9d460");
         } else if (joueur.getCouleur().equals(IJoueur.CouleurJoueur.BLEU)) {

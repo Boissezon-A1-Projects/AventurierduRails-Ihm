@@ -7,6 +7,7 @@ import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.mecanique.Joueur;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -15,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -26,6 +28,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 
 import java.util.List;
 
@@ -67,6 +71,8 @@ public class VueDuJeu extends BorderPane {
 
     private Label boutonsWagons;
     private Label boutonsBateaux;
+
+    private BooleanProperty choisiDesDestinations;
 
 
     public VueDuJeu(IJeu jeu) {
@@ -112,7 +118,7 @@ public class VueDuJeu extends BorderPane {
 
         // Place les vues des joueurs
 
-
+        choisiDesDestinations= new SimpleBooleanProperty();
         plateau.setVisible(true);
         plateau.setDisable(false);
     }
@@ -122,20 +128,35 @@ public class VueDuJeu extends BorderPane {
     ChangeListener<IJoueur> changeCourant = new ChangeListener<IJoueur>() {
         @Override
         public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur joueurCourant) {
-            List<IJoueur> list = (List<IJoueur>) ((VueDuJeu) getScene().getRoot()).getJeu().getJoueurs();
-            int compteur =0;
-            for (IJoueur joueur : list) {
-                if(!joueur.equals(joueurCourant)){
-                    if(compteur==0){
-                        vueJoueurGauche.setUp(joueur);
-                    }else if(compteur==1){
-                        vueJoueurDroite.setUp(joueur);
-                    }else{
-                        vueJoueurHaut.setUp(joueur);
-                    }
-                    compteur++;
+            List<IJoueur> listJoueurs = (List<IJoueur>) jeu.getJoueurs();
+            int indiceJoueurCourant=0;
+
+            for (int i = 0; i < listJoueurs.size(); i++) {
+                if(listJoueurs.get(i).equals((joueurCourant))){
+                    indiceJoueurCourant=i;
+                    break;
                 }
             }
+            if(indiceJoueurCourant==0){
+                vueJoueurGauche.setUp(listJoueurs.get(3));
+                vueJoueurDroite.setUp(listJoueurs.get(1));
+                vueJoueurHaut.setUp(listJoueurs.get(2));
+
+            } else if (indiceJoueurCourant==1) {
+                vueJoueurGauche.setUp(listJoueurs.get(0));
+                vueJoueurDroite.setUp(listJoueurs.get(2));
+                vueJoueurHaut.setUp(listJoueurs.get(3));
+
+            } else if (indiceJoueurCourant==2) {
+                vueJoueurGauche.setUp(listJoueurs.get(1));
+                vueJoueurDroite.setUp(listJoueurs.get(3));
+                vueJoueurHaut.setUp(listJoueurs.get(0));
+            }else{
+                vueJoueurGauche.setUp(listJoueurs.get(2));
+                vueJoueurDroite.setUp(listJoueurs.get(0));
+                vueJoueurHaut.setUp(listJoueurs.get(1));
+            }
+
         }
     };
 
@@ -182,35 +203,49 @@ public class VueDuJeu extends BorderPane {
 
 
     //change la scene quand plus en preparation
-    ChangeListener<Boolean> estEnPreparation = new ChangeListener<Boolean>() {
-        @Override
-        public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
-            VBox nvCentre = new VBox();
-            HBox plateauEtPioches = new HBox();
-            nvCentre.setPadding(new Insets(10));
+    ChangeListener<Boolean> estEnPreparation = (observableValue, aBoolean, t1) -> changerLePlateauDeJeu();
 
-            plateauEtPioches.setSpacing(15);
-            VBox pioches = new VBox();
-            HBox wagonsETBateauxPioches = new HBox();
-            wagonsETBateauxPioches.getChildren().addAll(piocheWagon,piocheBateau); wagonsETBateauxPioches.setSpacing(15);
-            pioches.setSpacing(10);
-            pioches.getChildren().addAll(wagonsETBateauxPioches,piocheDestination, cartesVisibles);
-            plateauEtPioches.getChildren().addAll(plateau, pioches);
-            nvCentre.getChildren().addAll(instruction,plateauEtPioches);
-            setCenter(nvCentre);
-            plateau.creerBindings();
-            HBox nvBas = new HBox();
-            VBox boutonPasser= new VBox(); boutonPasser.getChildren().add(passer);
+    public void changerLePlateauDeJeu(){
+        VBox nvCentre = new VBox();
+        HBox plateauEtPioches = new HBox();
+        nvCentre.setPadding(new Insets(10));
 
-            nvBas.getChildren().addAll(vueJoueurCourant,boutonPasser);
-            nvBas.setAlignment(Pos.CENTER);
-            setTop(vueJoueurHaut);
-            setRight(vueJoueurDroite);
-            setLeft(vueJoueurGauche);
-            setBottom(nvBas);
+        plateauEtPioches.setSpacing(15);
+        VBox pioches = new VBox();
+        HBox wagonsETBateauxPioches = new HBox();
+        wagonsETBateauxPioches.getChildren().addAll(piocheWagon,piocheBateau); wagonsETBateauxPioches.setSpacing(15);
+        pioches.setSpacing(10);
+        pioches.getChildren().addAll(wagonsETBateauxPioches,piocheDestination, cartesVisibles);
+        plateauEtPioches.getChildren().addAll(plateau, pioches);
+        nvCentre.getChildren().addAll(instruction,plateauEtPioches);
+        setCenter(nvCentre);
+        plateau.creerBindings();
+        HBox nvBas = new HBox();
+        VBox boutonPasser= new VBox(); boutonPasser.getChildren().add(passer);
 
-        }
-    };
+        nvBas.getChildren().addAll(vueJoueurCourant,boutonPasser);
+        nvBas.setAlignment(Pos.CENTER);
+
+
+        setTop(vueJoueurHaut);
+        setRight(vueJoueurDroite);
+        setLeft(vueJoueurGauche);
+
+
+        setBottom(nvBas);
+    }
+
+    public void changerLePlateauPourDesti(){
+
+
+        VBox v= new VBox();
+        v.getChildren().addAll(destinations,passer);
+        setCenter(v);
+
+        setTop(vueJoueurHaut);
+        setRight(vueJoueurDroite);
+        setLeft(vueJoueurGauche);
+    }
 
     //pour changer les destinations lors de la phase de prepa
     ListChangeListener<IDestination> lesDestinationsInitialesChangent = new ListChangeListener<IDestination>() {
@@ -248,7 +283,6 @@ public class VueDuJeu extends BorderPane {
 
     EventHandler<MouseEvent> carteVisiblesClickée = mouseEvent -> {
         VueCarteTransport v = (VueCarteTransport) mouseEvent.getSource();
-        System.out.println("aaaa");
         cartesVisibles.getChildren().remove(v);
         getJeu().uneCarteTransportAEteChoisie(v.getCarteTransport());
     };
@@ -288,8 +322,11 @@ public class VueDuJeu extends BorderPane {
         @Override
         public void handle(MouseEvent mouseEvent) {
             jeu.nouvelleDestinationDemandee();
+            choisiDesDestinations.setValue(true);
+            /** IL FAUT DISPLAY LE PLATEAU POUR CHOISIR LES DESTI*/
         }
     };
+
 
 
 
@@ -303,14 +340,22 @@ public class VueDuJeu extends BorderPane {
         jeu.jeuEnPreparationProperty().addListener(estEnPreparation);
         instruction.textProperty().addListener(instructionChange);
         fieldNbPions.addEventHandler(KeyEvent.KEY_PRESSED, nbPionsAEteChoisi);
+
+
         jeu.joueurCourantProperty().addListener(changeCourant);
+
         piocheDestination.addEventHandler(MouseEvent.MOUSE_CLICKED, piocheDestiClickée);
         piocheWagon.addEventHandler(MouseEvent.MOUSE_CLICKED, piocheWagonsClickée);
         piocheBateau.addEventHandler(MouseEvent.MOUSE_CLICKED, piocheBateauClickée);
+
         piocheDestination.disableProperty().bind(jeu.piocheDestinationVideProperty());
         piocheBateau.disableProperty().bind(jeu.piocheBateauVideProperty());
         piocheWagon.disableProperty().bind(jeu.piocheWagonVideProperty());
+
         jeu.cartesTransportVisiblesProperty().addListener(lesCartesVisiblesChangent);
+
+
+
     }
 
     public IJeu getJeu() {

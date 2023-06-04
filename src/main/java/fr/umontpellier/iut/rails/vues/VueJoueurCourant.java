@@ -88,18 +88,7 @@ public class VueJoueurCourant extends HBox {
         setPadding(new Insets(10));
     }
 
-    /*ListChangeListener<ICarteTransport> listenerCarteJoueur = new ListChangeListener<ICarteTransport>() {
-        @Override
-        public void onChanged(Change<? extends ICarteTransport> change) {
-            while(change.next()){
-                if(change.wasRemoved()){
-                    for (ICarteTransport carte: change.getRemoved()) {
 
-                    }
-                }
-            }
-        }
-    };*/
 
    /* ListChangeListener<CarteTransport> listenerCarteTransportPosee = new ListChangeListener<CarteTransport>() {
         @Override
@@ -122,9 +111,6 @@ public class VueJoueurCourant extends HBox {
 
 
     };
-
-
-
 
     ChangeListener<IJoueur> listenerJoueurCourant = new ChangeListener<IJoueur>() {
         @Override
@@ -161,15 +147,15 @@ public class VueJoueurCourant extends HBox {
             }
             nomJoueur.setText("Joueur Courant: " +joueurCourant.getNom());
             cartesTransportBox.getChildren().clear();
-            for (int i = 0; i < joueurCourant.getCartesTransport().size(); i+=3) {
+            for (int i = 0; i < joueurCourant.getCartesTransport().size(); i+=4) {
                 List<ICarteTransport> list = new ArrayList<ICarteTransport>();
                 VBox v = new VBox();
                 v.setAlignment(Pos.CENTER);
                 v.setSpacing(-25);
 
                 int compteur =i;
-                if((joueurCourant.getCartesTransport().size()-i)>=3){
-                    while(compteur<i+3){
+                if((joueurCourant.getCartesTransport().size()-i)>=4){
+                    while(compteur<i+4){
 
                         list.add(joueurCourant.getCartesTransport().get(compteur));
                         compteur++;
@@ -190,13 +176,7 @@ public class VueJoueurCourant extends HBox {
                 }
 
                 cartesTransportBox.getChildren().add(v);
-
             }
-
-
-            /*joueurCourant.cartesTransportProperty().addListener(listenerCarteJoueur);
-            joueurCourant.cartesTransportPoseesProperty().addListener(listenerCarteTransportPosee);*/
-
 
         }
 
@@ -205,8 +185,6 @@ public class VueJoueurCourant extends HBox {
 
     public void creerBindings(){
         ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().addListener(listenerJoueurCourant);
-
-
     }
 
 }

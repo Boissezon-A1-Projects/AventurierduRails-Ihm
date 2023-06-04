@@ -19,10 +19,11 @@ public class VueCarteTransport extends Label {
         StringBuffer  nomCarte = new StringBuffer();
         nomCarte.append("carte-");
         if(this.carteTransport.estBateau()){
-            nomCarte.append("BATEAU-");
-        } else if (this.carteTransport.estDouble()) {
-            nomCarte.append("DOUBLE-");
-        }else if (carteTransport.estJoker()) {
+            if(this.carteTransport.estDouble()){
+                nomCarte.append("DOUBLE-");
+            }else{nomCarte.append("BATEAU-");}
+
+        } else if (carteTransport.estJoker()) {
             nomCarte.append("JOKER-");
         }else{
             nomCarte.append("WAGON-");
