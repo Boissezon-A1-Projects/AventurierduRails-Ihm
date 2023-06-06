@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public final class DonneesGraphiques {
     public final static Map<String, ArrayList<DonneesSegments>> routes;
-    private final static Map<String, DonneesLayout> villes;
+    public final static Map<String, DonneesCerclesPorts> villes;
     public final static Map<String, DonneesCerclesPorts> ports;
 
     private final static Image map = new Image("images/map.jpg");
@@ -23,9 +23,9 @@ public final class DonneesGraphiques {
     public static final double pourcentageEcran = .8, // permet de définir une proportion de la scène par rapport à l'écran de l'utilisateur
             largeurInitialePlateau = map.getWidth(),// 1920.0 largeur de l'image
             hauteurInitialePlateau = map.getHeight(),// 1069.0 hauteur de l'image
-            largeurRectangle = 70,
-            hauteurRectangle = 60,
-            rayonInitial = 30;
+            largeurRectangle = 46,
+            hauteurRectangle = 14,
+            rayonInitial = 12;
 
     static {
         routes = new LinkedHashMap<>();
@@ -703,54 +703,17 @@ public final class DonneesGraphiques {
     }
 
     static {
-        villes = new HashMap<>();
-        villes.put("Cadiz", new DonneesLayout(144, 1072));
-        villes.put("Madrid", new DonneesLayout(147, 946));
-        villes.put("Barcelona", new DonneesLayout(336, 961));
-        villes.put("Lisboa", new DonneesLayout(32, 981));
-        villes.put("Pamplona", new DonneesLayout(318, 805));
-        villes.put("Paris", new DonneesLayout(425, 544));
-        villes.put("Dieppe", new DonneesLayout(341, 467));
-        villes.put("Brest", new DonneesLayout(188, 516));
-        villes.put("London", new DonneesLayout(358, 313));
-        villes.put("Amsterdam", new DonneesLayout(524, 319));
-        villes.put("Bruxelles", new DonneesLayout(485, 399));
-        villes.put("Edinburgh", new DonneesLayout(245, 56));
-        villes.put("Zurich", new DonneesLayout(622, 638));
-        villes.put("Marseille", new DonneesLayout(575, 797));
-        villes.put("Frankfurt", new DonneesLayout(638, 454));
-        villes.put("Munchen", new DonneesLayout(737, 530));
-        villes.put("Wien", new DonneesLayout(930, 559));
-        villes.put("Venezia", new DonneesLayout(763, 694));
-        villes.put("Roma", new DonneesLayout(779, 849));
-        villes.put("Brindisi", new DonneesLayout(925, 892));
-        villes.put("Palermo", new DonneesLayout(841, 1072));
-        villes.put("Athina", new DonneesLayout(1136, 1024));
-        villes.put("Sofia", new DonneesLayout(1167, 830));
-        villes.put("Sarajevo", new DonneesLayout(1053, 815));
-        villes.put("Zagrab", new DonneesLayout(908, 714));
-        villes.put("Budapest", new DonneesLayout(1014, 602));
-        villes.put("Kyiv", new DonneesLayout(1370, 438));
-        villes.put("Warszawa", new DonneesLayout(1113, 345));
-        villes.put("Wilno", new DonneesLayout(1302, 303));
-        villes.put("Smolensk", new DonneesLayout(1479, 310));
-        villes.put("Moskva", new DonneesLayout(1625, 269));
-        villes.put("Kharkov", new DonneesLayout(1600, 528));
-        villes.put("Rostov", new DonneesLayout(1671, 618));
-        villes.put("Sochi", new DonneesLayout(1660, 770));
-        villes.put("Erzurum", new DonneesLayout(1628, 986));
-        villes.put("Constantinople", new DonneesLayout(1358, 932));
-        villes.put("Angora", new DonneesLayout(1492, 1026));
-        villes.put("Smyrna", new DonneesLayout(1282, 1068));
-        villes.put("Essen", new DonneesLayout(663, 335));
-        villes.put("Berlin", new DonneesLayout(834, 359));
-        villes.put("Kobenhavn", new DonneesLayout(784, 155));
-        villes.put("Stockholm", new DonneesLayout(963, 22));
-        villes.put("Riga", new DonneesLayout(1169, 71));
-        villes.put("Petrograd", new DonneesLayout(1458, 64));
-        villes.put("Danzig", new DonneesLayout(1028, 226));
-        villes.put("Bucuresti", new DonneesLayout(1271, 721));
-        villes.put("Sevastopol", new DonneesLayout(1508, 746));
+        villes = new LinkedHashMap<>();
+        villes.put("Winnipeg", new DonneesCerclesPorts(234, 309.79999923706055));
+        villes.put("Mexico", new DonneesCerclesPorts (184, 564.7999992370605));
+        villes.put("Moskva", new DonneesCerclesPorts (1030, 260.79999923706055));
+        villes.put("Tehran", new DonneesCerclesPorts (1105, 443.79999923706055));
+        villes.put("Djibouti", new DonneesCerclesPorts (1061, 615.7999992370605));
+        villes.put("Lahore", new DonneesCerclesPorts (1263, 432.79999923706055));
+        villes.put("Novosibirsk", new DonneesCerclesPorts (1291, 270.79999923706055));
+        villes.put("Yakutsk", new DonneesCerclesPorts (1483, 178.79999923706055));
+        villes.put("Beijing", new DonneesCerclesPorts (1478, 377.79999923706055));
+        villes.put("Port-aux-Francais", new DonneesCerclesPorts (1225, 979));
     }
 
     static {
