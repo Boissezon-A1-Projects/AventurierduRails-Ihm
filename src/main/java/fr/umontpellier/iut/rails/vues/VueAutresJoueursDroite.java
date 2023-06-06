@@ -22,9 +22,8 @@ import javafx.scene.layout.VBox;
  */
 public class VueAutresJoueursDroite extends VBox {
     private Label nomJoueur;
-    private VBox destinations;
     private Label scoreJoueur;
-
+    private VBox destinations;
     public VueAutresJoueursDroite(){
         nomJoueur = new Label();
         scoreJoueur = new Label();
@@ -53,7 +52,6 @@ public class VueAutresJoueursDroite extends VBox {
         }else{
             setStyle("-fx-background-color: #e960d8");
         }
-
         StringProperty stringScoreJoueur = new SimpleStringProperty();
         stringScoreJoueur.set("Score de " + joueur.getNom() + " : " + String.valueOf(joueur.getScore()));
         scoreJoueur.textProperty().bind(stringScoreJoueur);

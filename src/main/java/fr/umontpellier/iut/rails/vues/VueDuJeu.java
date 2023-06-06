@@ -137,26 +137,10 @@ public class VueDuJeu extends BorderPane {
                     break;
                 }
             }
-            if(indiceJoueurCourant==0){
-                vueJoueurGauche.setUp(listJoueurs.get(3));
-                vueJoueurDroite.setUp(listJoueurs.get(1));
-                vueJoueurHaut.setUp(listJoueurs.get(2));
 
-            } else if (indiceJoueurCourant==1) {
-                vueJoueurGauche.setUp(listJoueurs.get(0));
-                vueJoueurDroite.setUp(listJoueurs.get(2));
-                vueJoueurHaut.setUp(listJoueurs.get(3));
-
-            } else if (indiceJoueurCourant==2) {
-                vueJoueurGauche.setUp(listJoueurs.get(1));
-                vueJoueurDroite.setUp(listJoueurs.get(3));
-                vueJoueurHaut.setUp(listJoueurs.get(0));
-            }else{
-                vueJoueurGauche.setUp(listJoueurs.get(2));
-                vueJoueurDroite.setUp(listJoueurs.get(0));
-                vueJoueurHaut.setUp(listJoueurs.get(1));
-            }
-
+            vueJoueurDroite.setUp(listJoueurs.get((indiceJoueurCourant+1)%4));
+            vueJoueurHaut.setUp(listJoueurs.get((indiceJoueurCourant+2)%4));
+            vueJoueurGauche.setUp(listJoueurs.get((indiceJoueurCourant+3)%4));
         }
     };
 
