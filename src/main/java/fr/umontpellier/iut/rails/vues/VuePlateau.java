@@ -4,22 +4,19 @@ import fr.umontpellier.iut.rails.ICarteTransport;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.IRoute;
 import fr.umontpellier.iut.rails.IVille;
-import fr.umontpellier.iut.rails.mecanique.Joueur;
-import fr.umontpellier.iut.rails.mecanique.Route;
-import fr.umontpellier.iut.rails.mecanique.data.Ville;
-import javafx.beans.InvalidationListener;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.binding.StringBinding;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Paint;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Screen;
@@ -39,9 +36,11 @@ public class VuePlateau extends Pane {
     @FXML
     private ImageView mapMonde;
 
-    private StringBinding couleurProprio;
 
-    private ChangeListener<IJoueur> changeDeProprietaire;
+
+    private IRoute routeChoisie;
+
+    private IVille portChoisi;
 
     public VuePlateau() {
         try {
@@ -55,27 +54,72 @@ public class VuePlateau extends Pane {
         setMinSize(Screen.getPrimary().getBounds().getWidth()/3, Screen.getPrimary().getBounds().getHeight()/3) ;
     }
 
+    private ListChangeListener<ICarteTransport> ajouteDesCartesPoseesPourRoute = new ListChangeListener<ICarteTransport>() {
+        @Override
+        public void onChanged(Change<? extends ICarteTransport> change) {
+
+            routeChoisie.proprietaireProperty().setValue( ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get());
+
+        }
+    };
+
+    private ListChangeListener<ICarteTransport> ajouteDesCartesPoseesPourPort = new ListChangeListener<ICarteTransport>() {
+        @Override
+        public void onChanged(Change<? extends ICarteTransport> change) {
+
+            portChoisi.proprietaireProperty().setValue( ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get());
+
+        }
+    };
+
+    private  ChangeListener<IJoueur> changeDeProprioRoute = new ChangeListener<IJoueur>() {
+        @Override
+        public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur t1) {
+            for (Node o: getChildren() ) {
+                if(o.getId().equals(routeChoisie.getNom())) {
+                    Image v = new Image("images/wagons/image-wagon-" + routeChoisie.proprietaireProperty().get().getCouleur() + ".png");
+
+                    Rectangle r = (Rectangle) o;
+                    r.setFill(new ImagePattern(v));
+
+                }
+            }
+        }
+    };
+
+    private ChangeListener<IJoueur> changeDeProprioPort = new ChangeListener<IJoueur>() {
+        @Override
+        public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur t1) {
+            for (Node o: getChildren() ) {
+                if(o.getId().equals(portChoisi.getNom())) {
+                    Image v = new Image("images/gares/gare-" + portChoisi.proprietaireProperty().get().getCouleur() + ".png");
+
+                    Circle c = (Circle) o;
+                    c.setFill(new ImagePattern(v));
+
+                }
+            }
+        }
+    };
+
+
     EventHandler<MouseEvent> choixRoute = event -> {
-        Rectangle r = (Rectangle) event.getSource();
-        ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(r.getId());
-        ajouterRoutes();
-
-//        for (DonneesGraphiques.DonneesSegments s: DonneesGraphiques.routes.get(r.getId())) {
-//            System.out.println(s);
-//            Rectangle rectangleSegment = new Rectangle(s.getXHautGauche(), s.getYHautGauche(), DonneesGraphiques.largeurRectangle, DonneesGraphiques.hauteurRectangle);
-//            rectangleSegment.setRotate(s.getAngle());
-//            rectangleSegment.setFill(Paint.valueOf("#FFFFFF"));
-//            bindRectangle(rectangleSegment, s.getXHautGauche(), s.getYHautGauche());
-//
-//        }
-
+        List<? extends IRoute> listeRoutes = ((VueDuJeu) getScene().getRoot()).getJeu().getRoutes();
+        Rectangle rect = (Rectangle) event.getSource();
+        routeChoisie = listeRoutes.stream().filter(r -> r.getNom().equals(rect.getId())).findAny().orElse(null);
+        ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(rect.getId());
+        ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportProperty().addListener(ajouteDesCartesPoseesPourRoute);
 
     };
 
-    EventHandler<MouseEvent> choixPort = event -> {
-        Circle ville = (Circle) event.getSource();
-        ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(ville.getId());
 
+
+    EventHandler<MouseEvent> choixPort = event -> {
+        List<? extends IVille> listePorts = ((VueDuJeu) getScene().getRoot()).getJeu().getPorts();
+        Circle ville = (Circle) event.getSource();
+        portChoisi = listePorts.stream().filter(r -> r.getNom().equals(ville.getId())).findAny().orElse(null);
+        ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(ville.getId());
+        ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportProperty().addListener(ajouteDesCartesPoseesPourPort);
     };
 
     public void creerBindings() {
@@ -85,6 +129,7 @@ public class VuePlateau extends Pane {
     }
 
     private void ajouterPorts() {
+        List<? extends IVille> listePorts = ((VueDuJeu) getScene().getRoot()).getJeu().getPorts();
         for (String nomPort : DonneesGraphiques.ports.keySet()) {
             DonneesGraphiques.DonneesCerclesPorts positionPortSurPlateau = DonneesGraphiques.ports.get(nomPort);
             Circle cerclePort = new Circle(positionPortSurPlateau.centreX(), positionPortSurPlateau.centreY(), DonneesGraphiques.rayonInitial);
@@ -92,6 +137,8 @@ public class VuePlateau extends Pane {
             getChildren().add(cerclePort);
             bindCerclePortAuPlateau(positionPortSurPlateau, cerclePort);
             cerclePort.setOnMouseClicked(choixPort);
+            IVille v = listePorts.stream().filter(r -> r.getNom().equals(nomPort)).findAny().orElse(null);
+            v.proprietaireProperty().addListener(changeDeProprioPort);
         }
     }
 
@@ -106,8 +153,6 @@ public class VuePlateau extends Pane {
             ArrayList<DonneesGraphiques.DonneesSegments> segmentsRoute = DonneesGraphiques.routes.get(nomRoute);
             IRoute route = listeRoutes.stream().filter(r -> r.getNom().equals(nomRoute)).findAny().orElse(null);
 
-            /*route.proprietaireProperty().addListener(changeDeProprietaire);*/
-
             for (DonneesGraphiques.DonneesSegments unSegment : segmentsRoute) {
                 Rectangle rectangleSegment = new Rectangle(unSegment.getXHautGauche(), unSegment.getYHautGauche(), DonneesGraphiques.largeurRectangle, DonneesGraphiques.hauteurRectangle);
                 rectangleSegment.setId(nomRoute);
@@ -115,22 +160,10 @@ public class VuePlateau extends Pane {
                 getChildren().add(rectangleSegment);
                 rectangleSegment.setOnMouseClicked(choixRoute);
                 bindRectangle(rectangleSegment, unSegment.getXHautGauche(), unSegment.getYHautGauche());
-                /*changeDeProprietaire = (observableValue, iJoueur, proprio) -> {
-                    if(proprio.getCouleur().equals(IJoueur.CouleurJoueur.JAUNE)){
-                        rectangleSegment.setStyle("-fx-background-color:  #e9d460");
-                    } else if (proprio.getCouleur().equals(IJoueur.CouleurJoueur.BLEU)) {
-                        rectangleSegment.setStyle("-fx-background-color: #60c4e9");
-                    } else if (proprio.getCouleur().equals(IJoueur.CouleurJoueur.ROUGE)) {
-                        rectangleSegment.setStyle("-fx-background-color: #e96060");
-                    }else if (proprio.getCouleur().equals(IJoueur.CouleurJoueur.VERT)) {
-                        rectangleSegment.setStyle("-fx-background-color: #60e96c");
-                    }else{
-                        rectangleSegment.setStyle("-fx-background-color: #e960d8");
-                    }
 
-
-                };*/
             }
+            route.proprietaireProperty().addListener(changeDeProprioRoute);
+
         }
     }
 
