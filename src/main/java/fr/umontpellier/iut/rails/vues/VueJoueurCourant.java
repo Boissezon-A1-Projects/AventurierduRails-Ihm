@@ -50,6 +50,8 @@ public class VueJoueurCourant extends HBox {
 
     private Label scoreJoueur;
 
+    private HBox cartesTransportDefausse;
+
     public VueJoueurCourant(){
         this.setSpacing(15);
         VBox infoJoueur = new VBox();
@@ -59,6 +61,8 @@ public class VueJoueurCourant extends HBox {
         infoJoueur.getChildren().addAll(nomJoueur,imageJoueur, scoreJoueur);
         cartesTransportBox = new HBox();
         cartesTransportBox.setSpacing(5);
+        cartesTransportDefausse = new HBox();
+
         destinationsBox = new VBox();
 
         pionsEtPorts = new VBox();
@@ -90,7 +94,7 @@ public class VueJoueurCourant extends HBox {
         pionsEtPorts.getChildren().addAll(bateau,wagons,ports);
 
 
-        getChildren().addAll(infoJoueur, destinationsBox,cartesTransportBox, pionsEtPorts);
+        getChildren().addAll(cartesTransportDefausse,infoJoueur, destinationsBox,cartesTransportBox, pionsEtPorts);
 
         pionsEtPorts.setAlignment(Pos.CENTER);
 
@@ -105,40 +109,57 @@ public class VueJoueurCourant extends HBox {
         @Override
         public void onChanged(Change<? extends ICarteTransport> change) {
             while(change.next()){
+                System.out.println("change");
                 if(change.wasAdded()){
-                    for (int i = 0; i<change.getAddedSubList().size(); i+=4) {
-                        List<ICarteTransport> list = new ArrayList<ICarteTransport>();
-                        VBox v = new VBox();
-                        v.setAlignment(Pos.CENTER);
-                        v.setSpacing(-25);
+                    System.out.println(change.getAddedSubList().size());
+                    if( ((VueDuJeu) getScene().getRoot()).getJeu().jeuEnPreparationProperty().get()) {
+                        for (int i = 0; i < change.getAddedSubList().size(); i += 4) {
+                            List<ICarteTransport> list = new ArrayList<ICarteTransport>();
+                            VBox v = new VBox();
+                            v.setAlignment(Pos.CENTER);
+                            v.setSpacing(-25);
 
-                        int compteur =i;
-                        if((change.getAddedSubList().size()-i)>=4){
-                            while(compteur<i+4){
+                            int compteur = i;
+                            if ((change.getAddedSubList().size() - i) >= 4) {
+                                while (compteur < i + 4) {
+                                    System.out.println("ajou");
+                                    list.add(change.getAddedSubList().get(compteur));
+                                    compteur++;
+                                }
+                            } else {
 
-                                list.add(change.getAddedSubList().get(compteur));
-                                compteur++;
+                                while (compteur < change.getAddedSubList().size()) {
+                                    System.out.println("ajou");
+                                    list.add(change.getAddedSubList().get(compteur));
+                                    compteur++;
+                                }
                             }
-                        }else{
 
-                            while(compteur<change.getAddedSubList().size()){
-                                list.add(change.getAddedSubList().get(compteur));
-                                compteur++;
+                            for (ICarteTransport carteTransport : list) {
+                                VueCarteTransport carteenmain = new VueCarteTransport(carteTransport, 1, 60, 96);
+                                carteenmain.addEventHandler(MouseEvent.MOUSE_CLICKED, eventCartesQueQuandCarteCHoisie);
+                                v.getChildren().add(carteenmain);
+
                             }
-                        }
 
-                        for (ICarteTransport carteTransport : list  ) {
-                            VueCarteTransport carteenmain = new VueCarteTransport(carteTransport,1,60,96);
-                            carteenmain.addEventHandler(MouseEvent.MOUSE_CLICKED,eventCartesQueQuandCarteCHoisie);
-                            v.getChildren().add(carteenmain);
+                            cartesTransportBox.getChildren().add(v);
+
 
                         }
-
-                        cartesTransportBox.getChildren().add(v);
-
-
+                    }else {
+                        for (ICarteTransport c : change.getAddedSubList()) {
+                            System.out.println("in");
+                            VueCarteTransport v = new VueCarteTransport(c, 1, 60, 96);
+                            ajouteCarte(v);
+                        }
+                        System.out.println("out");
                     }
-
+                }
+                if(change.wasRemoved()){
+                    for (ICarteTransport c: change.getRemoved()) {
+                        VueCarteTransport v = new VueCarteTransport(c,1,60,96);
+                        supprimeCarte(v);
+                    }
                 }
             }
         }
@@ -148,18 +169,31 @@ public class VueJoueurCourant extends HBox {
 
     EventHandler<MouseEvent> eventCartesQueQuandCarteCHoisie = mouseEvent -> {
         VueCarteTransport carte = (VueCarteTransport) mouseEvent.getSource();
-        supprimeCarte(carte);
         ((VueDuJeu) getScene().getRoot()).getJeu().uneCarteDuJoueurEstJouee(carte.getCarteTransport());
-
-
     };
+
+    public void ajouteCarte(VueCarteTransport v){
+        VBox vb = (VBox) cartesTransportBox.getChildren().get(cartesTransportBox.getChildren().size()-1);
+        if(vb.getChildren().size()<4){
+            System.out.println("a");
+            vb.getChildren().add(v);
+        }else{
+            System.out.println("b");
+            VBox nvB = new VBox();
+            nvB.setSpacing(-25);
+            nvB.setAlignment(Pos.CENTER);
+
+            nvB.getChildren().add(v);
+            cartesTransportBox.getChildren().add(nvB);
+        }
+    }
 
     public void supprimeCarte(VueCarteTransport v){
         for (Node vb: cartesTransportBox.getChildren()) {
             VBox vbox = (VBox) vb;
             for (Node c: vbox.getChildren()) {
                 VueCarteTransport carte = (VueCarteTransport) c;
-                if(carte.equals(v)){
+                if(carte.getCarteTransport().equals(v.getCarteTransport())){
                     vbox.getChildren().remove(carte);
                     break;
                 }
@@ -239,7 +273,8 @@ public class VueJoueurCourant extends HBox {
             StringProperty stringScoreJoueur = new SimpleStringProperty();
             stringScoreJoueur.set("Score de " + joueurCourant.getNom() + " : " + String.valueOf(joueurCourant.getScore()));
             scoreJoueur.textProperty().bind(stringScoreJoueur);
-            ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportProperty().addListener(listenerCarteTransport);
+
+
         }
     };
 

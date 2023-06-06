@@ -270,9 +270,9 @@ public class VueDuJeu extends BorderPane {
 
     EventHandler<MouseEvent> carteVisiblesClickée = mouseEvent -> {
         VueCarteTransport v = (VueCarteTransport) mouseEvent.getSource();
-        cartesVisibles.getChildren().remove(v);
         getJeu().uneCarteTransportAEteChoisie(v.getCarteTransport());
     };
+
 
     ListChangeListener<ICarteTransport> lesCartesVisiblesChangent = new ListChangeListener<ICarteTransport>() {
         @Override
@@ -285,22 +285,40 @@ public class VueDuJeu extends BorderPane {
                         v.addEventHandler(MouseEvent.MOUSE_CLICKED,carteVisiblesClickée);
                     }
                 }
-
+                if(change.wasRemoved()){
+                    for (ICarteTransport carteVisible: change.getRemoved()) {
+                        VueCarteTransport v = new VueCarteTransport(carteVisible,1,90,126);
+                        supprimerCarteVisible(v);
+                    }
+                }
             }
         }
     };
 
+    public void supprimerCarteVisible(VueCarteTransport v){
+        for (Node n: cartesVisibles.getChildren() ) {
+            VueCarteTransport v1 = (VueCarteTransport) n;
+            if(v.getCarteTransport().equals(v1.getCarteTransport())){
+                cartesVisibles.getChildren().remove(n);
+                break;
+            }
+        }
+    }
+
 
     EventHandler<MouseEvent> piocheWagonsClickée = new EventHandler<MouseEvent>() {
         @Override
-        public void handle(MouseEvent mouseEvent) {
-            jeu.uneCarteWagonAEtePiochee();
+        public void handle(MouseEvent mouseEvent){
+            System.out.println("appel pioche w");
+                jeu.uneCarteWagonAEtePiochee();
         }
     };
 
     EventHandler<MouseEvent> piocheBateauClickée = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
+
+            System.out.println("appel pioche b");
             jeu.uneCarteBateauAEtePiochee();
         }
     };
@@ -351,7 +369,9 @@ public class VueDuJeu extends BorderPane {
 
         jeu.cartesTransportVisiblesProperty().addListener(lesCartesVisiblesChangent);
 
-
+        for (IJoueur j : jeu.getJoueurs()) {
+            j.cartesTransportProperty().addListener(vueJoueurCourant.listenerCarteTransport);
+        }
 
     }
 
