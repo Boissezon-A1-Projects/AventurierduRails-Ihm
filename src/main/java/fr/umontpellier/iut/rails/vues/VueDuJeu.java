@@ -15,6 +15,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -328,17 +329,19 @@ public class VueDuJeu extends BorderPane {
         public void handle(MouseEvent mouseEvent) {
             jeu.nouvelleDestinationDemandee();
             choisiDesDestinations.setValue(true);
-            // La popup
-            Label labelPopup = new Label("Bonjour je suis un label");
-            Button passerDesti = new Button("Passer");
-            passerDesti.setOnMouseClicked(actionPasserParDefaut);
 
-            popupDestinations.getContent().addAll(destinations,passerDesti);
-            popupDestinations.setHeight(200);
-            popupDestinations.setWidth(200);
-            System.out.println("aaaaaa");
+            // La popup
+            VBox fondPopup = new VBox();
+            fondPopup.getChildren().addAll(destinations);
+            popupDestinations.getContent().addAll(fondPopup);
+            popupDestinations.setHeight(210);
+            popupDestinations.setWidth(500);
+
+            Point2D point = piocheDestination.localToScene(0.0, 0.0);
+            popupDestinations.setX(RailsIHM.getPrimaryStage().getX() + point.getX() + 10);
+            popupDestinations.setY(RailsIHM.getPrimaryStage().getY() + point.getY() + 50);
+
             popupDestinations.show(RailsIHM.getPrimaryStage());
-            /** IL FAUT DISPLAY LE PLATEAU POUR CHOISIR LES DESTI*/
         }
     };
 
