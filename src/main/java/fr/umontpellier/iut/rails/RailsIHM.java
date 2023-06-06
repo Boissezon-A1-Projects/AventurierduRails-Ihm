@@ -20,7 +20,7 @@ import java.util.Optional;
 public class RailsIHM extends Application {
 
     private VueChoixJoueurs vueChoixJoueurs;
-    private Stage primaryStage;
+    private static Stage primaryStage;
     private Jeu jeu;
 
     private final boolean avecVueChoixJoueurs = false;
@@ -89,6 +89,8 @@ public class RailsIHM extends Application {
     public Jeu getJeu() {
         return jeu;
     }
+
+    public static Stage getPrimaryStage(){return primaryStage;}
 
     public static void main(String[] args) {
         launch(args);

@@ -4,6 +4,7 @@ import fr.umontpellier.iut.rails.ICarteTransport;
 import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJeu;
 import fr.umontpellier.iut.rails.IJoueur;
+import fr.umontpellier.iut.rails.RailsIHM;
 import fr.umontpellier.iut.rails.mecanique.Joueur;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -73,6 +74,8 @@ public class VueDuJeu extends BorderPane {
     private Label boutonsBateaux;
 
     private BooleanProperty choisiDesDestinations;
+
+    Popup popupDestinations = new Popup();
 
 
     public VueDuJeu(IJeu jeu) {
@@ -307,6 +310,16 @@ public class VueDuJeu extends BorderPane {
         public void handle(MouseEvent mouseEvent) {
             jeu.nouvelleDestinationDemandee();
             choisiDesDestinations.setValue(true);
+            // La popup
+            Label labelPopup = new Label("Bonjour je suis un label");
+            Button passerDesti = new Button("Passer");
+            passerDesti.setOnMouseClicked(actionPasserParDefaut);
+
+            popupDestinations.getContent().addAll(destinations,passerDesti);
+            popupDestinations.setHeight(200);
+            popupDestinations.setWidth(200);
+            System.out.println("aaaaaa");
+            popupDestinations.show(RailsIHM.getPrimaryStage());
             /** IL FAUT DISPLAY LE PLATEAU POUR CHOISIR LES DESTI*/
         }
     };
