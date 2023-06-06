@@ -11,6 +11,7 @@ import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -106,11 +107,26 @@ public class VueJoueurCourant extends HBox {
 
     EventHandler<MouseEvent> eventCartesQueQuandCarteCHoisie = mouseEvent -> {
         VueCarteTransport carte = (VueCarteTransport) mouseEvent.getSource();
+        supprimeCarte(carte);
         ((VueDuJeu) getScene().getRoot()).getJeu().uneCarteDuJoueurEstJouee(carte.getCarteTransport());
-        cartesTransportBox.getChildren().remove(carte);
 
 
     };
+
+    public void supprimeCarte(VueCarteTransport v){
+        for (Node vb: cartesTransportBox.getChildren()) {
+            VBox vbox = (VBox) vb;
+            for (Node c: vbox.getChildren()) {
+                VueCarteTransport carte = (VueCarteTransport) c;
+                if(carte.equals(v)){
+                    vbox.getChildren().remove(carte);
+                    break;
+                }
+
+            }
+        }
+
+    }
 
     ChangeListener<IJoueur> listenerJoueurCourant = new ChangeListener<IJoueur>() {
         @Override
