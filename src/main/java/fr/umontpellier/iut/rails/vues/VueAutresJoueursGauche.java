@@ -3,6 +3,8 @@ package fr.umontpellier.iut.rails.vues;
 import fr.umontpellier.iut.rails.ICarteTransport;
 import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJoueur;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point3D;
@@ -22,12 +24,13 @@ import javafx.scene.layout.VBox;
 public class VueAutresJoueursGauche extends VBox {
     private Label nomJoueur;
     private VBox destinations;
+    private Label scoreJoueur;
 
     public VueAutresJoueursGauche(){
         nomJoueur = new Label();
-
         destinations = new VBox();
-        getChildren().addAll(nomJoueur, destinations);
+        scoreJoueur = new Label();
+        getChildren().addAll(nomJoueur, destinations, scoreJoueur);
         setAlignment(Pos.CENTER);
         setMaxWidth(100);
 
@@ -53,6 +56,10 @@ public class VueAutresJoueursGauche extends VBox {
         }else{
             setStyle("-fx-background-color: #e960d8");
         }
+
+        StringProperty stringScoreJoueur = new SimpleStringProperty();
+        stringScoreJoueur.set("Score de " + joueur.getNom() + " : " + String.valueOf(joueur.getScore()));
+        scoreJoueur.textProperty().bind(stringScoreJoueur);
     }
 }
 

@@ -4,7 +4,12 @@ import fr.umontpellier.iut.rails.ICarteTransport;
 import fr.umontpellier.iut.rails.IDestination;
 import fr.umontpellier.iut.rails.IJoueur;
 import fr.umontpellier.iut.rails.IRoute;
+import fr.umontpellier.iut.rails.mecanique.Joueur;
 import fr.umontpellier.iut.rails.mecanique.data.CarteTransport;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
@@ -43,12 +48,15 @@ public class VueJoueurCourant extends HBox {
     private Label nbWagons;
     private Label nbPorts;
 
+    private Label scoreJoueur;
+
     public VueJoueurCourant(){
         this.setSpacing(15);
         VBox infoJoueur = new VBox();
         nomJoueur =new Label();
         imageJoueur = new Label();
-        infoJoueur.getChildren().addAll(nomJoueur,imageJoueur);
+        scoreJoueur = new Label();
+        infoJoueur.getChildren().addAll(nomJoueur,imageJoueur, scoreJoueur);
         cartesTransportBox = new HBox();
         cartesTransportBox.setSpacing(5);
         destinationsBox = new VBox();
@@ -192,11 +200,12 @@ public class VueJoueurCourant extends HBox {
                 }
 
                 cartesTransportBox.getChildren().add(v);
+
+                StringProperty stringScoreJoueur = new SimpleStringProperty();
+                stringScoreJoueur.set("Score de " + joueurCourant.getNom() + " : " + String.valueOf(joueurCourant.getScore()));
+                scoreJoueur.textProperty().bind(stringScoreJoueur);
             }
-
         }
-
-
     };
 
     public void creerBindings(){
