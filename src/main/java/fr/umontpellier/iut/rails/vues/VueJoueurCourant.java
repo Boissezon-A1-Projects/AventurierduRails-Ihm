@@ -95,22 +95,55 @@ public class VueJoueurCourant extends HBox {
         pionsEtPorts.setAlignment(Pos.CENTER);
 
         setPadding(new Insets(10));
+
+
     }
 
 
 
-   /* ListChangeListener<CarteTransport> listenerCarteTransportPosee = new ListChangeListener<CarteTransport>() {
+    ListChangeListener<ICarteTransport> listenerCarteTransport = new ListChangeListener<ICarteTransport>() {
         @Override
-        public void onChanged(Change<? extends CarteTransport> change) {
+        public void onChanged(Change<? extends ICarteTransport> change) {
             while(change.next()){
                 if(change.wasAdded()){
-                    for (CarteTransport carte : change.getAddedSubList() ) {
+                    for (int i = 0; i<change.getAddedSubList().size(); i+=4) {
+                        List<ICarteTransport> list = new ArrayList<ICarteTransport>();
+                        VBox v = new VBox();
+                        v.setAlignment(Pos.CENTER);
+                        v.setSpacing(-25);
+
+                        int compteur =i;
+                        if((change.getAddedSubList().size()-i)>=4){
+                            while(compteur<i+4){
+
+                                list.add(change.getAddedSubList().get(compteur));
+                                compteur++;
+                            }
+                        }else{
+
+                            while(compteur<change.getAddedSubList().size()){
+                                list.add(change.getAddedSubList().get(compteur));
+                                compteur++;
+                            }
+                        }
+
+                        for (ICarteTransport carteTransport : list  ) {
+                            VueCarteTransport carteenmain = new VueCarteTransport(carteTransport,1,60,96);
+                            carteenmain.addEventHandler(MouseEvent.MOUSE_CLICKED,eventCartesQueQuandCarteCHoisie);
+                            v.getChildren().add(carteenmain);
+
+                        }
+
+                        cartesTransportBox.getChildren().add(v);
+
 
                     }
+
                 }
             }
         }
-    }*/
+    };
+
 
 
     EventHandler<MouseEvent> eventCartesQueQuandCarteCHoisie = mouseEvent -> {
@@ -201,15 +234,19 @@ public class VueJoueurCourant extends HBox {
 
                 cartesTransportBox.getChildren().add(v);
 
-                StringProperty stringScoreJoueur = new SimpleStringProperty();
-                stringScoreJoueur.set("Score de " + joueurCourant.getNom() + " : " + String.valueOf(joueurCourant.getScore()));
-                scoreJoueur.textProperty().bind(stringScoreJoueur);
+
             }
+            StringProperty stringScoreJoueur = new SimpleStringProperty();
+            stringScoreJoueur.set("Score de " + joueurCourant.getNom() + " : " + String.valueOf(joueurCourant.getScore()));
+            scoreJoueur.textProperty().bind(stringScoreJoueur);
+            ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportProperty().addListener(listenerCarteTransport);
         }
     };
 
     public void creerBindings(){
         ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().addListener(listenerJoueurCourant);
+
+
     }
 
 }
