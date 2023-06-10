@@ -30,6 +30,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
 import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 
@@ -60,7 +61,7 @@ public class VueDuJeu extends BorderPane {
     private Button passer;
 
     private Label instruction;
-    private VBox bas;
+    private HBox bas;
     private VBox destinations;
     private TextField fieldNbPions;
 
@@ -76,32 +77,50 @@ public class VueDuJeu extends BorderPane {
 
     private BooleanProperty choisiDesDestinations;
 
-    Popup popupDestinations = new Popup();
+
+    private Font f;
+     private Popup popupDestinations = new Popup();
 
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
-        VBox centre = new VBox();
+
+        HBox plat = new HBox();
         plateau = new VuePlateau();
+        plat.getChildren().add(plateau);
         passer = new Button("Passer");
+        HBox instr = new HBox();
         instruction = new Label();
+
+        instr.getChildren().add(instruction);
+        instr.setAlignment(Pos.CENTER);
+        instruction.setWrapText(true);
         destinations = new VBox();
         fieldNbPions = new TextField();
         fieldNbPions.setVisible(false); fieldNbPions.setDisable(true);
-        centre.getChildren().addAll(instruction, destinations ,fieldNbPions,passer);
-        setCenter(centre);
+        VBox droite = new VBox();
+        VBox passeretTextField = new VBox(); passeretTextField.getChildren().addAll(fieldNbPions,passer);
+        passeretTextField.setAlignment(Pos.CENTER);
+        droite.getChildren().addAll(instr, destinations ,passeretTextField);
+        droite.setPrefWidth(300);
+        droite.setAlignment(Pos.CENTER);
+        HBox vraiCentre = new HBox();
+        vraiCentre.getChildren().addAll(plat);
+        setCenter(vraiCentre);
+        setRight(droite);
         destinations.setAlignment(Pos.CENTER);
         fieldNbPions.setMinSize(50,25);
         fieldNbPions.setMaxSize(50,25);
-        centre.setAlignment(Pos.CENTER);
+        droite.setAlignment(Pos.CENTER_LEFT);
 
         // Instancie les vues de joueurs
         vueJoueurCourant = new VueJoueurCourant();
         vueJoueurDroite = new VueAutresJoueursDroite();
         vueJoueurGauche = new VueAutresJoueursGauche();
         vueJoueurHaut = new VueAutresJoueursHaut();
-        bas =new VBox();
+        bas =new HBox();
         bas.getChildren().addAll(vueJoueurCourant);
+        bas.setAlignment(Pos.CENTER);
         setBottom(bas);
 
         //choses pour plus tard
@@ -113,9 +132,14 @@ public class VueDuJeu extends BorderPane {
         piocheWagon = new Label(); piocheWagon.setGraphic(imageWagonPioche);
         ImageView imageDestiPioche = new ImageView("images/cartesWagons/destinations.png");
         imageDestiPioche.setFitWidth(215); imageDestiPioche.setFitHeight(135);
-
         piocheDestination = new Label(); piocheDestination.setGraphic(imageDestiPioche);
 
+        ImageView imageBoutonBateau = new ImageView("images/bouton-pions-bateau.png");
+        imageBoutonBateau.setFitHeight(61); imageBoutonBateau.setFitWidth(60);
+        boutonsBateaux = new Label(); boutonsBateaux.setGraphic(imageBoutonBateau);
+        ImageView imageBoutonWagon = new ImageView("images/bouton-pions-wagon.png");
+        imageBoutonWagon.setFitHeight(61); imageBoutonWagon.setFitWidth(60);
+        boutonsWagons = new Label(); boutonsWagons.setGraphic(imageBoutonWagon);
         cartesVisibles = new VBox();
         cartesVisibles.setSpacing(-50);
 
@@ -123,8 +147,7 @@ public class VueDuJeu extends BorderPane {
         // Place les vues des joueurs
 
         choisiDesDestinations= new SimpleBooleanProperty();
-        plateau.setVisible(true);
-        plateau.setDisable(false);
+
     }
 
 
@@ -132,6 +155,7 @@ public class VueDuJeu extends BorderPane {
     ChangeListener<IJoueur> changeCourant = new ChangeListener<IJoueur>() {
         @Override
         public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur iJoueur, IJoueur joueurCourant) {
+
             List<IJoueur> listJoueurs = (List<IJoueur>) jeu.getJoueurs();
             int indiceJoueurCourant=0;
 
@@ -167,9 +191,9 @@ public class VueDuJeu extends BorderPane {
                 if(Integer.valueOf(fieldNbPions.getText()) <= 25 && Integer.valueOf(fieldNbPions.getText()) >= 10) {
 
                     jeu.leNombreDePionsSouhaiteAEteRenseigne(fieldNbPions.getText());
-                    fieldNbPions.setVisible(false);
+                    fieldNbPions.clear();
                     fieldNbPions.setDisable(true);
-                    passer.setDisable(false);
+                    fieldNbPions.setVisible(false);
                 }
             }
         }
@@ -181,59 +205,73 @@ public class VueDuJeu extends BorderPane {
         @Override
         public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
             if(t1.equals("Saisissez un nombre de pions wagon entre 10 et 25")){
+                fieldNbPions.clear();
                 fieldNbPions.setDisable(false);
                 fieldNbPions.setVisible(true);
-                passer.setDisable(true);
+            }
+            if(t1.equals("Vous pouvez défausser 2 destinations")){
+                fieldNbPions.clear();
+                fieldNbPions.setDisable(true);
+                fieldNbPions.setVisible(false);
             }
         }
     };
-
 
 
     //change la scene quand plus en preparation
     ChangeListener<Boolean> estEnPreparation = (observableValue, aBoolean, t1) -> changerLePlateauDeJeu();
 
     public void changerLePlateauDeJeu(){
-        VBox nvCentre = new VBox();
-        HBox plateauEtPioches = new HBox();
-        nvCentre.setPadding(new Insets(10));
 
-        plateauEtPioches.setSpacing(15);
-        VBox pioches = new VBox();
+        //centre
+        VBox nvCentre = new VBox();
+        nvCentre.setAlignment(Pos.CENTER);
+        nvCentre.setSpacing(5);
+
+        //pioches wagons et bateaux
         HBox wagonsETBateauxPioches = new HBox();
         wagonsETBateauxPioches.getChildren().addAll(piocheWagon,piocheBateau); wagonsETBateauxPioches.setSpacing(15);
+
+        //cartes visibles et boutons wagons/bateaux
+         HBox cartesVEtBoutons = new HBox();
+        VBox boutons = new VBox();
+        boutons.getChildren().addAll(boutonsBateaux,boutonsWagons);
+        boutons.setAlignment(Pos.CENTER); boutons.setSpacing(5);
+        cartesVEtBoutons.getChildren().addAll(cartesVisibles,boutons);
+        cartesVEtBoutons.setSpacing(10);
+
+        //Vbox avec toutes les pioches et les cartes visibles et les boutons
+        VBox pioches = new VBox();
         pioches.setSpacing(10);
-        pioches.getChildren().addAll(wagonsETBateauxPioches,piocheDestination, cartesVisibles);
-        plateauEtPioches.getChildren().addAll(plateau, pioches);
+        pioches.getChildren().addAll(wagonsETBateauxPioches,piocheDestination, cartesVEtBoutons);
+        pioches.setAlignment(Pos.CENTER_LEFT);
+        pioches.setPadding(new Insets(0,60,0,0));
+        //contient le plateau et les pioches
+        HBox plateauEtPioches = new HBox();
+        nvCentre.setPadding(new Insets(10));
+        HBox plat = new HBox(plateau);
+        plateauEtPioches.getChildren().addAll(plat, pioches);
         nvCentre.getChildren().addAll(instruction,plateauEtPioches);
         setCenter(nvCentre);
         plateau.creerBindings();
+
+        //bas avec vuejoueurcourant + passer
         HBox nvBas = new HBox();
         VBox boutonPasser= new VBox(); boutonPasser.getChildren().add(passer);
 
+        boutonPasser.setAlignment(Pos.CENTER);
         nvBas.getChildren().addAll(vueJoueurCourant,boutonPasser);
         nvBas.setAlignment(Pos.CENTER);
-
-
-        setTop(vueJoueurHaut);
-        setRight(vueJoueurDroite);
-        setLeft(vueJoueurGauche);
-
-
         setBottom(nvBas);
-    }
+        nvBas.setSpacing(100);
 
-    public void changerLePlateauPourDesti(){
-
-
-        VBox v= new VBox();
-        v.getChildren().addAll(destinations,passer);
-        setCenter(v);
-
+        //aux autres endroits les vues autres joueurs
         setTop(vueJoueurHaut);
         setRight(vueJoueurDroite);
         setLeft(vueJoueurGauche);
+
     }
+
 
     //pour changer les destinations lors de la phase de prepa
     ListChangeListener<IDestination> lesDestinationsInitialesChangent = new ListChangeListener<IDestination>() {
@@ -296,6 +334,8 @@ public class VueDuJeu extends BorderPane {
         }
     };
 
+
+
     public void supprimerCarteVisible(VueCarteTransport v){
         for (Node n: cartesVisibles.getChildren() ) {
             VueCarteTransport v1 = (VueCarteTransport) n;
@@ -345,10 +385,34 @@ public class VueDuJeu extends BorderPane {
         }
     };
 
+    public void popupPions(){
+        VBox fondPopup = new VBox();
+        fieldNbPions.setVisible(true);
+        fieldNbPions.setDisable(false);
+        fondPopup.getChildren().addAll(fieldNbPions);
+        popupDestinations.getContent().addAll(fondPopup);
+        popupDestinations.setHeight(210);
+        popupDestinations.setWidth(500);
+        Point2D point = boutonsWagons.localToScene(0.0, 0.0);
+        popupDestinations.setX(RailsIHM.getPrimaryStage().getX() + point.getX() + 10);
+        popupDestinations.setY(RailsIHM.getPrimaryStage().getY() + point.getY() + 25);
 
+        popupDestinations.show(RailsIHM.getPrimaryStage());
+    }
 
+    EventHandler<MouseEvent> pionsWagonsClickés = mouseEvent -> {
+        getJeu().nouveauxPionsWagonsDemandes();
+        if(getJeu().saisieNbPionsWagonAutoriseeProperty().getValue()){
+        popupPions();}
+    };
+    EventHandler<MouseEvent> pionsBateauClickés = mouseEvent -> {
+        getJeu().nouveauxPionsBateauxDemandes();
+        if(getJeu().saisieNbPionsBateauAutoriseeProperty().getValue()){
+            popupPions();}
+    };
 
     public void creerBindings() {
+        plateau.creerBindings();
         plateau.prefWidthProperty().bind(getScene().widthProperty());
         plateau.prefHeightProperty().bind(getScene().heightProperty());
         jeu.destinationsInitialesProperty().addListener(lesDestinationsInitialesChangent);
@@ -358,7 +422,7 @@ public class VueDuJeu extends BorderPane {
         jeu.jeuEnPreparationProperty().addListener(estEnPreparation);
         instruction.textProperty().addListener(instructionChange);
         fieldNbPions.addEventHandler(KeyEvent.KEY_PRESSED, nbPionsAEteChoisi);
-
+//        fieldNbPions.textProperty().addListener(changementTextField);
 
         jeu.joueurCourantProperty().addListener(changeCourant);
 
@@ -370,10 +434,14 @@ public class VueDuJeu extends BorderPane {
         piocheBateau.disableProperty().bind(jeu.piocheBateauVideProperty());
         piocheWagon.disableProperty().bind(jeu.piocheWagonVideProperty());
 
+        boutonsWagons.addEventHandler(MouseEvent.MOUSE_CLICKED, pionsWagonsClickés);
+        boutonsBateaux.addEventHandler(MouseEvent.MOUSE_CLICKED, pionsBateauClickés);
+
         jeu.cartesTransportVisiblesProperty().addListener(lesCartesVisiblesChangent);
 
         for (IJoueur j : jeu.getJoueurs()) {
             j.cartesTransportProperty().addListener(vueJoueurCourant.listenerCarteTransport);
+            j.cartesTransportPoseesProperty().addListener(vueJoueurCourant.listeCartePosées);
         }
 
     }
@@ -383,5 +451,7 @@ public class VueDuJeu extends BorderPane {
     }
 
     EventHandler<? super MouseEvent> actionPasserParDefaut = (mouseEvent -> getJeu().passerAEteChoisi());
+
+
 
 }

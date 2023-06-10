@@ -2,6 +2,7 @@ package fr.umontpellier.iut.rails.vues;
 
 import fr.umontpellier.iut.rails.IDestination;
 import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
 /**

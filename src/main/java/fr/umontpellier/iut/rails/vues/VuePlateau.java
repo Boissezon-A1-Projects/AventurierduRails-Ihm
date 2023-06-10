@@ -108,7 +108,7 @@ public class VuePlateau extends Pane {
         Rectangle rect = (Rectangle) event.getSource();
         routeChoisie = listeRoutes.stream().filter(r -> r.getNom().equals(rect.getId())).findAny().orElse(null);
         ((VueDuJeu) getScene().getRoot()).getJeu().uneRouteAEteChoisie(rect.getId());
-        ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportProperty().addListener(ajouteDesCartesPoseesPourRoute);
+        ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportPoseesProperty().addListener(ajouteDesCartesPoseesPourRoute);
 
     };
 
@@ -119,11 +119,11 @@ public class VuePlateau extends Pane {
         Circle ville = (Circle) event.getSource();
         portChoisi = listePorts.stream().filter(r -> r.getNom().equals(ville.getId())).findAny().orElse(null);
         ((VueDuJeu) getScene().getRoot()).getJeu().unPortAEteChoisi(ville.getId());
-        ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportProperty().addListener(ajouteDesCartesPoseesPourPort);
+        ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().get().cartesTransportPoseesProperty().addListener(ajouteDesCartesPoseesPourPort);
     };
 
     public void creerBindings() {
- ajouterVilles();
+        ajouterVilles();
         ajouterPorts();
         ajouterRoutes();
         bindRedimensionEtCentragePlateau();

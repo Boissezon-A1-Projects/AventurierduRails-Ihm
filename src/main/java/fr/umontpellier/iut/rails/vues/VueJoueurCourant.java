@@ -26,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -54,45 +55,54 @@ public class VueJoueurCourant extends HBox {
 
     public VueJoueurCourant(){
         this.setSpacing(15);
+
         VBox infoJoueur = new VBox();
         nomJoueur =new Label();
         imageJoueur = new Label();
         scoreJoueur = new Label();
         infoJoueur.getChildren().addAll(nomJoueur,imageJoueur, scoreJoueur);
+        infoJoueur.setAlignment(Pos.CENTER);
+
         cartesTransportBox = new HBox();
         cartesTransportBox.setSpacing(5);
         cartesTransportDefausse = new HBox();
-
+        cartesTransportDefausse.setSpacing(5);
         destinationsBox = new VBox();
-
+        destinationsBox.setAlignment(Pos.CENTER);
+        Label d = new Label("Destinations :");
+        destinationsBox.getChildren().add(d);
         pionsEtPorts = new VBox();
 
         HBox bateau = new HBox();
         Label bateauLogo = new Label();
         ImageView v = new ImageView("images/bouton-pions-bateau.png");
-        v.setFitWidth(20); v.setFitHeight(20);
+        v.setFitWidth(30); v.setFitHeight(30);
         bateauLogo.setGraphic(v);
         nbBateaux = new Label();
         bateau.getChildren().addAll(bateauLogo,nbBateaux);
-        bateau.setSpacing(2);
+        bateau.setSpacing(10);
+        bateau.setAlignment(Pos.CENTER_LEFT);
         HBox wagons = new HBox();
         Label wagonLogo = new Label();
         ImageView v2 = new ImageView("images/bouton-pions-wagon.png");
-        v2.setFitWidth(20); v2.setFitHeight(20);
+        v2.setFitWidth(30); v2.setFitHeight(30);
         wagonLogo.setGraphic(v2);
         nbWagons = new Label();
         wagons.getChildren().addAll(wagonLogo,nbWagons);
-        wagons.setSpacing(2);
+        wagons.setSpacing(10);
+        wagons.setAlignment(Pos.CENTER_LEFT);
         HBox ports = new HBox();
         Label portLogo = new Label();
         ImageView v3 = new ImageView("images/port.png");
-        v3.setFitWidth(20); v3.setFitHeight(20);
+        v3.setFitWidth(30); v3.setFitHeight(30);
         portLogo.setGraphic(v3);
         nbPorts = new Label();
         ports.getChildren().addAll(portLogo,nbPorts);
-        ports.setSpacing(2);
-        pionsEtPorts.getChildren().addAll(bateau,wagons,ports);
+        ports.setSpacing(10);
+        ports.setAlignment(Pos.CENTER_LEFT);
 
+        pionsEtPorts.getChildren().addAll(bateau,wagons,ports);
+        pionsEtPorts.setSpacing(5);
 
         getChildren().addAll(cartesTransportDefausse,infoJoueur, destinationsBox,cartesTransportBox, pionsEtPorts);
 
@@ -104,7 +114,7 @@ public class VueJoueurCourant extends HBox {
     }
 
 
-
+    //listener poru les cartes
     ListChangeListener<ICarteTransport> listenerCarteTransport = new ListChangeListener<ICarteTransport>() {
         @Override
         public void onChanged(Change<? extends ICarteTransport> change) {
@@ -165,20 +175,11 @@ public class VueJoueurCourant extends HBox {
         }
     };
 
-
-
-    EventHandler<MouseEvent> eventCartesQueQuandCarteCHoisie = mouseEvent -> {
-        VueCarteTransport carte = (VueCarteTransport) mouseEvent.getSource();
-        ((VueDuJeu) getScene().getRoot()).getJeu().uneCarteDuJoueurEstJouee(carte.getCarteTransport());
-    };
-
     public void ajouteCarte(VueCarteTransport v){
         VBox vb = (VBox) cartesTransportBox.getChildren().get(cartesTransportBox.getChildren().size()-1);
         if(vb.getChildren().size()<4){
-            System.out.println("a");
             vb.getChildren().add(v);
         }else{
-            System.out.println("b");
             VBox nvB = new VBox();
             nvB.setSpacing(-25);
             nvB.setAlignment(Pos.CENTER);
@@ -203,6 +204,73 @@ public class VueJoueurCourant extends HBox {
 
     }
 
+    //listener pour la defausse
+    ListChangeListener<ICarteTransport> listeCartePosées = new ListChangeListener<ICarteTransport>() {
+        @Override
+        public void onChanged(Change<? extends ICarteTransport> change) {
+            while(change.next()){
+                if(change.wasAdded()){
+                    for (ICarteTransport c : change.getAddedSubList()) {
+                        System.out.println("in");
+                        VueCarteTransport v = new VueCarteTransport(c, 1, 60, 96);
+                        ajouteCartePosee(v);
+                    }
+                    System.out.println("out");
+                }
+                if(change.wasRemoved()){
+                    for (ICarteTransport c: change.getRemoved()) {
+                        VueCarteTransport v = new VueCarteTransport(c,1,60,96);
+                        supprimeCartePosee(v);
+                    }
+                }
+            }
+        }
+    };
+
+    EventHandler<MouseEvent> eventCartesQueQuandCarteCHoisie = mouseEvent -> {
+        VueCarteTransport carte = (VueCarteTransport) mouseEvent.getSource();
+        ((VueDuJeu) getScene().getRoot()).getJeu().uneCarteDuJoueurEstJouee(carte.getCarteTransport());
+    };
+
+
+    public void ajouteCartePosee(VueCarteTransport v){
+        if(cartesTransportDefausse.getChildren().size()!=0) {
+            VBox vb = (VBox) cartesTransportDefausse.getChildren().get(cartesTransportDefausse.getChildren().size() - 1);
+            if(vb.getChildren().size()<4 ){
+                vb.getChildren().add(v);
+            }else{
+                VBox nvB = new VBox();
+                nvB.setSpacing(-25);
+                nvB.setAlignment(Pos.CENTER);
+
+                nvB.getChildren().add(v);
+                cartesTransportDefausse.getChildren().add(nvB);
+            }
+        }else{
+            VBox nvB = new VBox();
+            nvB.setSpacing(-25);
+            nvB.setAlignment(Pos.CENTER);
+
+            nvB.getChildren().add(v);
+            cartesTransportDefausse.getChildren().add(nvB);
+        }
+    }
+
+    public void supprimeCartePosee(VueCarteTransport v){
+        for (Node vb: cartesTransportDefausse.getChildren()) {
+            VBox vbox = (VBox) vb;
+            for (Node c: vbox.getChildren()) {
+                VueCarteTransport carte = (VueCarteTransport) c;
+                if(carte.getCarteTransport().equals(v.getCarteTransport())){
+                    vbox.getChildren().remove(carte);
+                    break;
+                }
+
+            }
+        }
+
+    }
+
     ChangeListener<IJoueur> listenerJoueurCourant = new ChangeListener<IJoueur>() {
         @Override
         public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur ancienJoueur, IJoueur joueurCourant) {
@@ -210,33 +278,40 @@ public class VueJoueurCourant extends HBox {
             nbWagons.setText(String.valueOf(joueurCourant.getNbPionsWagon()));
             nbBateaux.setText(String.valueOf(joueurCourant.getNbPionsBateau()));
             nbPorts.setText(String.valueOf(joueurCourant.getNbPorts()));
+
+
             ImageView joueur = new ImageView();
             if(joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.JAUNE)){
                 setStyle("-fx-background-color:  #e9d460");
                 joueur.setImage(new Image("images/cartesWagons/avatar-JAUNE.png"));
-            } else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.BLEU)) {
+            }
+            else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.BLEU)) {
                 setStyle("-fx-background-color: #60c4e9");
                 joueur.setImage(new Image("images/cartesWagons/avatar-BLEU.png"));
-            } else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.ROUGE)) {
+            }
+            else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.ROUGE)) {
                 setStyle("-fx-background-color: #e96060");
                 joueur.setImage(new Image("images/cartesWagons/avatar-ROUGE.png"));
-            }else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.VERT)) {
+            }
+            else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.VERT)) {
                 setStyle("-fx-background-color: #60e96c");
                 joueur.setImage(new Image("images/cartesWagons/avatar-VERT.png"));
-            }else{
+            }
+            else{
                 setStyle("-fx-background-color: #e960d8");
                 joueur.setImage(new Image("images/cartesWagons/avatar-ROSE.png"));
             }
             joueur.setFitHeight(84); joueur.setFitWidth(64.4);
             imageJoueur.setGraphic(joueur);
-
+            nomJoueur.setText(joueurCourant.getNom());
 
             destinationsBox.getChildren().clear();
             for (IDestination d : joueurCourant.getDestinations()) {
                 Label v = new Label(d.getVilles().toString());
+                v.setWrapText(true);
                 destinationsBox.getChildren().add(v);
             }
-            nomJoueur.setText("Joueur Courant: " +joueurCourant.getNom());
+
             cartesTransportBox.getChildren().clear();
             for (int i = 0; i < joueurCourant.getCartesTransport().size(); i+=4) {
                 List<ICarteTransport> list = new ArrayList<ICarteTransport>();
@@ -271,7 +346,7 @@ public class VueJoueurCourant extends HBox {
 
             }
             StringProperty stringScoreJoueur = new SimpleStringProperty();
-            stringScoreJoueur.set("Score de " + joueurCourant.getNom() + " : " + String.valueOf(joueurCourant.getScore()));
+            stringScoreJoueur.set("Score : " + String.valueOf(joueurCourant.getScore()));
             scoreJoueur.textProperty().bind(stringScoreJoueur);
 
 

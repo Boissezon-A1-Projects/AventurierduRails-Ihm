@@ -1,0 +1,105 @@
+This is the FONTLOG file for the "ModernAntiqua" ("ModernAntiqua-Book", "ModernAntiqua-BookOblique", "ModernAntiqua-Bold", "ModernAntiqua-BoldOblique") Font.
+
+
+This file provides detailed information on the "Modern Antiqua" Font Software.
+This information should be distributed along with the "Modern Antiqua" fonts
+and any derivative works.
+
+
+Basic Font Information
+
+"Modern Antiqua" Font is a Unicode typeface family that supports all languages
+that use the Latin script and its variants, and could be expanded to support
+other scripts.
+
+
+"Modern Antiqua" Font you"ll find at: https://fontlibrary.org
+
+
+"Modern Antiqua" Font is created with FontForge.
+
+
+More specifically, this release supports the following Unicode ranges:
+
+ - Basic Latin and Controls - 0000-007F (all)
+ - Latin 1 Supplement And Controls - 00A0-00FF (all)
+ - Latin Extended A - 0100-017F (all)
+ - Latin Extended B - 0192, 01FA-01FF, 0218-021B
+ - Spacing Modifier Letters - 02C6-02C7, 02C9-02CB, 02D8-02DD
+ - Latin Extended Additional - 1E02-1E03, 1E0A-1E0B, 1E1E-1E1F, 1E40-1E41,
+                               1E56-1E57, 1E60-1E61, 1E6A-1E6B, 1E80-1E85,
+                               1EF2-1EF3, 1E9E
+ - General Punctuation - 2013-2015, 2018-201E, 2020-2022, 2026, 2030, 2032-2033,
+                         2039, 203A, 203D, 2044
+ - Currency Symbols - 20AC
+ - Letterlike Symbols - 2105, 2113, 2116, 2117, 2122, 2126, 212E
+ - Mathematical Operators - 2202, 2206, 220F, 2211, 2212, 2215, 2219, 221A,
+                            221E, 222B, 2248, 2260, 2264, 2265
+ - Geometric Shapes - 25CA
+
+
+This release contains:
+
+ - ModernAntiqua-Book.ttf
+ - ModernAntiqua-BookOblique.ttf
+ - ModernAntiqua-Bold.ttf
+ - ModernAntiqua-BoldOblique.ttf
+ - FONTLOG.txt
+ - SIL - OpenFont License.txt - official license text
+ - ModernAntiqua-Book.pdf - demo
+ - ModernAntiqua-BookOblique.pdf - demo
+ - ModernAntiqua-Bold.pdf - demo
+ - ModernAntiqua-BoldOblique.pdf - demo
+
+
+ChangeLog
+
+28 May 2021 wmk69 (wmk69@o2.pl) Modern Antiqua Version 3.1.0
+ - Changed left/right side bearings in Bold/BoldOblique.
+ - Fixed kerning for all.
+
+03 March 2020 wmk69 (wmk69@o2.pl) Modern Antiqua Version 3.0.0
+ - Improved shapes of all glyphs.
+ - Added Oblique, Bold and Bold Oblique versions.
+ - Kerning fixed.
+ - Added UNI 01FA, 01FB, 02C6, 02C7, 02C9, 02CA, 02CB, 02D8, 02D9, 02DA, 02DB,
+                                     02DC, 02DD, 203D, 2116, 2117, 222B, 1E9E.
+
+26 September 2011 wmk69 (wmk69@o2.pl) Modern Antiqua Version 2.000
+- all glyphs redesigned, fixed all issues
+- changed name "ModernAntiqua" - "Modern Antiqua"
+- added glyphs: 0191, 01FA-01FF, 022C, 022D, 0237, 1E02, 1E03, 1E0A, 1E0B, 1E1E,
+  1E1F, 1E40, 1E41, 1E56, 1E57, 1E60, 1E61, 1E6A, 1E6B, 1E80-1E85, 1EF2, 1EF3
+
+16 May 2011 wmk69 (wmk69@o2.pl) ModernAntiqua Version 1.02
+- added Kerning by Classes Table (kern)
+- fixed some bugs with bearings
+- changed PS Private Dictionary
+- added Grid Fitting Table (gasp) version 1
+
+01 March 2011 (wmk69@o2.pl) ModernAntiqua Version 1.01
+- Small changes in rasterization
+
+18 Feb 2011 wmk69 (wmk69@o2.pl) ModernAntiqua Version 1.0
+- Initial release
+
+
+Acknowledgements
+
+If you make modifications be sure to add your name (N), email (E), web-address
+(if you have one) (W) and description (D).
+
+
+History
+
+This is another of my old fonts used to inscriptions on stone.
+I created the ModernAntiqua font about 14-15 years ago (like other fonts - when
+I started doing the inscriptions on stone professionally).
+The font is based on Roman square capitals. 
+Initially the font contained only capitals and digits. Later I made missing
+small fonts and some basical signs.
+Last year I started convert my fonts to the TTF files. The first was NovaCut
+and all the Nova family, next MedievalSharp, and here"s another...
+
+18 Feb 2011 wmk69 (wmk69@o2.pl)
+

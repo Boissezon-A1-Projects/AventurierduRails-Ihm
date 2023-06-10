@@ -23,9 +23,9 @@ public final class DonneesGraphiques {
     public static final double pourcentageEcran = .8, // permet de définir une proportion de la scène par rapport à l'écran de l'utilisateur
             largeurInitialePlateau = map.getWidth(),// 1920.0 largeur de l'image
             hauteurInitialePlateau = map.getHeight(),// 1069.0 hauteur de l'image
-            largeurRectangle = 46,
-            hauteurRectangle = 14,
-            rayonInitial = 12;
+            largeurRectangle = 75,
+            hauteurRectangle = 40,
+            rayonInitial = 25;
 
     static {
         routes = new LinkedHashMap<>();
