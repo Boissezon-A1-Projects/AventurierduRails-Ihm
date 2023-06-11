@@ -1,9 +1,6 @@
 package fr.umontpellier.iut.rails.vues;
 
-import fr.umontpellier.iut.rails.ICarteTransport;
-import fr.umontpellier.iut.rails.IDestination;
-import fr.umontpellier.iut.rails.IJoueur;
-import fr.umontpellier.iut.rails.IRoute;
+import fr.umontpellier.iut.rails.*;
 import fr.umontpellier.iut.rails.mecanique.Joueur;
 import fr.umontpellier.iut.rails.mecanique.data.CarteTransport;
 import javafx.beans.property.IntegerProperty;
@@ -15,6 +12,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -27,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Popup;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -56,6 +55,10 @@ public class VueJoueurCourant extends HBox {
 
     private HBox cartesTransportDefausse;
 
+    private HBox destinationsQuandTrop;
+
+    private Popup p;
+
     public VueJoueurCourant(){
         this.setSpacing(15);
 
@@ -75,6 +78,7 @@ public class VueJoueurCourant extends HBox {
         cartesTransportDefausse.setSpacing(5);
         destinationsBox = new VBox();
         destinationsBox.setAlignment(Pos.CENTER);
+        destinationsBox.setMaxHeight(250);
         Label d = new Label("Destinations :");
         destinationsBox.getChildren().add(d);
         pionsEtPorts = new VBox();
@@ -119,7 +123,12 @@ public class VueJoueurCourant extends HBox {
 
         setPadding(new Insets(10));
 
-
+        destinationsQuandTrop = new HBox();
+        p = new Popup();
+        p.getContent().addAll(destinationsQuandTrop);
+        Point2D point = new Point2D(RailsIHM.getPrimaryStage().getHeight()/2, RailsIHM.getPrimaryStage().getWidth()/2);
+        p.setAnchorX(RailsIHM.getPrimaryStage().getX() + point.getX());
+        p.setAnchorY(RailsIHM.getPrimaryStage().getY() + point.getY());
     }
 
 
@@ -274,6 +283,20 @@ public class VueJoueurCourant extends HBox {
 
     }
 
+    EventHandler<MouseEvent> faitApparaitrePopupDestination = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            p.show(RailsIHM.getPrimaryStage());
+        }
+    };
+    EventHandler<MouseEvent> faireDisparaitrePopupDestination = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+
+            p.hide();
+        }
+    };
+
     ChangeListener<IJoueur> listenerJoueurCourant = new ChangeListener<IJoueur>() {
         @Override
         public void changed(ObservableValue<? extends IJoueur> observableValue, IJoueur ancienJoueur, IJoueur joueurCourant) {
@@ -309,14 +332,59 @@ public class VueJoueurCourant extends HBox {
             nomJoueur.setText(joueurCourant.getNom());
 
             destinationsBox.getChildren().clear();
-            for (IDestination d : joueurCourant.getDestinations()) {
-                Label v = new Label(d.getVilles().toString());
-                v.setWrapText(true);
-                v.setFont(Font.font("Book Antiqua",14));
-                v.setTextAlignment(TextAlignment.CENTER);
-                destinationsBox.getChildren().add(v);
-            }
+            if(joueurCourant.getDestinations().size()<=8) {
+                for (IDestination d : joueurCourant.getDestinations()) {
+                    Label v = new Label(d.getVilles().toString());
+                    v.setWrapText(true);
+                    v.setFont(Font.font("Book Antiqua", 14));
+                    v.setTextAlignment(TextAlignment.CENTER);
+                    destinationsBox.getChildren().add(v);
+                }
+            }else{
+                for (int i=0; i<8; i++) {
+                    IDestination d = joueurCourant.getDestinations().get(i);
+                    Label v = new Label(d.getVilles().toString());
+                    v.setWrapText(true);
+                    v.setFont(Font.font("Book Antiqua", 14));
+                    v.setTextAlignment(TextAlignment.CENTER);
+                    destinationsBox.getChildren().add(v);
+                }
+                Label point = new Label("...");
+                destinationsBox.getChildren().add(point);
+                for (int i = 0; i < joueurCourant.getDestinations().size(); i+=5) {
+                    List<IDestination> list = new ArrayList<IDestination>();
+                    VBox v = new VBox();
+                    v.setAlignment(Pos.CENTER);
+                    v.setSpacing(10);
+                    v.setStyle("-fx-background-color: white");
 
+                    int compteur =i;
+                    if((joueurCourant.getDestinations().size()-i)>=5){
+                        while(compteur<i+5){
+
+                            list.add(joueurCourant.getDestinations().get(compteur));
+                            compteur++;
+                        }
+                    }else{
+
+                        while(compteur<joueurCourant.getDestinations().size()){
+                            list.add(joueurCourant.getDestinations().get(compteur));
+                            compteur++;
+                        }
+                    }
+
+                    for (IDestination desti : list  ) {
+                        Label destination = new Label(desti.getVilles().toString());
+                        v.getChildren().add(destination);
+
+                    }
+
+                    destinationsQuandTrop.getChildren().add(v);
+                }
+
+
+
+            }
             cartesTransportBox.getChildren().clear();
             for (int i = 0; i < joueurCourant.getCartesTransport().size(); i+=4) {
                 List<ICarteTransport> list = new ArrayList<ICarteTransport>();
@@ -358,9 +426,11 @@ public class VueJoueurCourant extends HBox {
         }
     };
 
+
     public void creerBindings(){
         ((VueDuJeu) getScene().getRoot()).getJeu().joueurCourantProperty().addListener(listenerJoueurCourant);
-
+        destinationsBox.addEventHandler(MouseEvent.MOUSE_ENTERED,faitApparaitrePopupDestination);
+        destinationsBox.addEventHandler(MouseEvent.MOUSE_EXITED,faireDisparaitrePopupDestination);
 
     }
 
