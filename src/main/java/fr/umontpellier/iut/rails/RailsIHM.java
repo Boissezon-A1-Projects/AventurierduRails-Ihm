@@ -50,7 +50,7 @@ public class RailsIHM extends Application {
         else {
             nomsJoueurs = new ArrayList<>();
             nomsJoueurs.add("Guybrush");
-            nomsJoueurs.add("Largo");
+            //nomsJoueurs.add("Largo");
             nomsJoueurs.add("LeChuck");
             nomsJoueurs.add("Elaine");
         }

@@ -175,6 +175,7 @@ public class VueDuJeu extends BorderPane {
             List<IJoueur> listJoueurs = (List<IJoueur>) jeu.getJoueurs();
             int indiceJoueurCourant=0;
 
+
             for (int i = 0; i < listJoueurs.size(); i++) {
                 if(listJoueurs.get(i).equals((joueurCourant))){
                     indiceJoueurCourant=i;
@@ -182,9 +183,18 @@ public class VueDuJeu extends BorderPane {
                 }
             }
 
+            if(jeu.getJoueurs().size() == 4){
             vueJoueurDroite.setUp(listJoueurs.get((indiceJoueurCourant+1)%4));
             vueJoueurHaut.setUp(listJoueurs.get((indiceJoueurCourant+2)%4));
             vueJoueurGauche.setUp(listJoueurs.get((indiceJoueurCourant+3)%4));
+            }
+            else if(jeu.getJoueurs().size() == 2){
+                vueJoueurHaut.setUp(listJoueurs.get((indiceJoueurCourant+1)%2));
+            }
+            else if(jeu.getJoueurs().size() == 3) {
+                vueJoueurGauche.setUp(listJoueurs.get((indiceJoueurCourant + 2) % 3));
+                vueJoueurHaut.setUp(listJoueurs.get((indiceJoueurCourant + 1) % 3));
+            }
         }
     };
 
@@ -281,12 +291,18 @@ public class VueDuJeu extends BorderPane {
         nvBas.setSpacing(100);
 
         //aux autres endroits les vues autres joueurs
+        if(jeu.getJoueurs().size() == 4){
+            HBox h = new HBox(); h.getChildren().add(vueJoueurDroite); h.setAlignment(Pos.CENTER);
+            setRight(h);
+            HBox h2 = new HBox(); h2.getChildren().add(vueJoueurGauche); h2.setAlignment(Pos.CENTER);
+            setLeft(h2);
+        }
+        else if(jeu.getJoueurs().size() == 3){
+            HBox h2 = new HBox(); h2.getChildren().add(vueJoueurGauche); h2.setAlignment(Pos.CENTER);
+            setLeft(h2);
+        }
         VBox v = new VBox(); v.getChildren().add(vueJoueurHaut); v.setAlignment(Pos.CENTER);
-        HBox h = new HBox(); h.getChildren().add(vueJoueurDroite); h.setAlignment(Pos.CENTER);
-        HBox h2 = new HBox(); h2.getChildren().add(vueJoueurGauche); h2.setAlignment(Pos.CENTER);
         setTop(v);
-        setRight(h);
-        setLeft(h2);
 
 
     }
