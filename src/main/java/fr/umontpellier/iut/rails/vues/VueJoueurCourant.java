@@ -128,9 +128,7 @@ public class VueJoueurCourant extends HBox {
         @Override
         public void onChanged(Change<? extends ICarteTransport> change) {
             while(change.next()){
-                System.out.println("change");
                 if(change.wasAdded()){
-                    System.out.println(change.getAddedSubList().size());
                     if( ((VueDuJeu) getScene().getRoot()).getJeu().jeuEnPreparationProperty().get()) {
                         for (int i = 0; i < change.getAddedSubList().size(); i += 4) {
                             List<ICarteTransport> list = new ArrayList<ICarteTransport>();
@@ -141,14 +139,12 @@ public class VueJoueurCourant extends HBox {
                             int compteur = i;
                             if ((change.getAddedSubList().size() - i) >= 4) {
                                 while (compteur < i + 4) {
-                                    System.out.println("ajou");
                                     list.add(change.getAddedSubList().get(compteur));
                                     compteur++;
                                 }
                             } else {
 
                                 while (compteur < change.getAddedSubList().size()) {
-                                    System.out.println("ajou");
                                     list.add(change.getAddedSubList().get(compteur));
                                     compteur++;
                                 }
@@ -167,11 +163,9 @@ public class VueJoueurCourant extends HBox {
                         }
                     }else {
                         for (ICarteTransport c : change.getAddedSubList()) {
-                            System.out.println("in");
                             VueCarteTransport v = new VueCarteTransport(c, 1, 60, 96);
                             ajouteCarte(v);
                         }
-                        System.out.println("out");
                     }
                 }
                 if(change.wasRemoved()){

@@ -203,13 +203,10 @@ public class VueDuJeu extends BorderPane {
         @Override
         public void handle(KeyEvent keyEvent) {
             if( keyEvent.getCode().equals(KeyCode.ENTER)) {
-                if(Integer.valueOf(fieldNbPions.getText()) <= 25 && Integer.valueOf(fieldNbPions.getText()) >= 10) {
+
 
                     jeu.leNombreDePionsSouhaiteAEteRenseigne(fieldNbPions.getText());
-                    fieldNbPions.clear();
-                    fieldNbPions.setDisable(true);
-                    fieldNbPions.setVisible(false);
-                }
+
             }
         }
     };
@@ -224,7 +221,8 @@ public class VueDuJeu extends BorderPane {
                 fieldNbPions.setDisable(false);
                 fieldNbPions.setVisible(true);
             }
-            if(t1.equals("Vous pouvez défausser 2 destinations")){
+
+            if(!t1.contains("Saisissez un nombre de pions")){
                 fieldNbPions.clear();
                 fieldNbPions.setDisable(true);
                 fieldNbPions.setVisible(false);
