@@ -110,7 +110,7 @@ public class VueAutresJoueursHaut extends HBox {
         return  bgColor;
     }
     public Label getPseudoJoueur() {
-        return pseudoJoueur;
+        return new Label(pseudoJoueur.getText());
     }
 }
 
