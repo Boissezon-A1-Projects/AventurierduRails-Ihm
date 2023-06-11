@@ -10,6 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 
@@ -41,6 +43,9 @@ public class VueAutresJoueursDroite extends VBox {
         setPadding(new Insets(10));
         statutJoueur.setWrapText(true);
         statutJoueur.setTextAlignment(TextAlignment.CENTER);
+        statutJoueur.setFont(Font.font("Book Antiqua",13));
+        pseudoJoueur.setFont(Font.font("Book Antiqua", FontWeight.BOLD,13));
+        scoreJoueur.setFont(Font.font("Book Antiqua",13));
     }
 
     public void setUp(IJoueur joueur){
@@ -48,6 +53,7 @@ public class VueAutresJoueursDroite extends VBox {
         destinations.getChildren().clear();
         for (IDestination d : joueur.getDestinations()) {
             Label v = new Label(d.getVilles().toString());
+            v.setFont(Font.font("Book Antiqua",13));
             destinations.getChildren().add(v);
         }
 
@@ -106,6 +112,8 @@ public class VueAutresJoueursDroite extends VBox {
     }
 
     public Label getPseudoJoueur() {
-        return new Label(pseudoJoueur.getText());
+        Label pJoueur = new Label(pseudoJoueur.getText());
+        pJoueur.setFont(Font.font("Book Antiqua",FontWeight.BOLD,13));
+        return pJoueur;
     }
 }

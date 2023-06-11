@@ -101,9 +101,6 @@ public class VueDuJeu extends BorderPane {
         instruction = new Label();
         instruction.setFont(Font.font("Book Antiqua", FontWeight.BOLD,16));
 
-//        instruction.setStyle("-fx-font-family: 'ModernAntiqua Book'");
-//        instruction.setStyle("-fx-font-size: 15");
-//        instruction.setFont(Font.loadFont("file:fonts/modern_antiqua/ModernAntiqua-Book.ttf",15));
         instr.getChildren().add(instruction);
         instr.setAlignment(Pos.CENTER);
         instruction.setWrapText(true);
@@ -271,9 +268,10 @@ public class VueDuJeu extends BorderPane {
         pioches.setSpacing(10);
         pioches.getChildren().addAll(wagonsETBateauxPioches,piocheDestination, cartesVEtBoutons);
         pioches.setAlignment(Pos.CENTER_LEFT);
-        pioches.setPadding(new Insets(0,60,0,0));
+        pioches.setPadding(new Insets(0,30,0,0));
         //contient le plateau et les pioches
         HBox plateauEtPioches = new HBox();
+        plateauEtPioches.setSpacing(30);
         nvCentre.setPadding(new Insets(10));
         HBox plat = new HBox(plateau);
         plateauEtPioches.getChildren().addAll(plat, pioches);
@@ -296,10 +294,12 @@ public class VueDuJeu extends BorderPane {
             setRight(h);
             HBox h2 = new HBox(); h2.getChildren().add(vueJoueurGauche); h2.setAlignment(Pos.CENTER);
             setLeft(h2);
+
         }
         else if(jeu.getJoueurs().size() == 3){
             HBox h2 = new HBox(); h2.getChildren().add(vueJoueurGauche); h2.setAlignment(Pos.CENTER);
             setLeft(h2);
+        }else if(jeu.getJoueurs().size()==2){
         }
         VBox v = new VBox(); v.getChildren().add(vueJoueurHaut); v.setAlignment(Pos.CENTER);
         setTop(v);

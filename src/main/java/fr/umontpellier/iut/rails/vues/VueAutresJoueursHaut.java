@@ -11,6 +11,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 
 
@@ -45,7 +47,9 @@ public class VueAutresJoueursHaut extends HBox {
         setSpacing(20);
         setPadding(new Insets(10));
         nonPP.setAlignment(Pos.CENTER);
-
+        statutJoueur.setFont(Font.font("Book Antiqua",13));
+        pseudoJoueur.setFont(Font.font("Book Antiqua", FontWeight.BOLD,13));
+        scoreJoueur.setFont(Font.font("Book Antiqua",13));
 
     }
 
@@ -54,6 +58,7 @@ public class VueAutresJoueursHaut extends HBox {
         destinations.getChildren().clear();
         for (IDestination d : joueur.getDestinations()) {
             Label v = new Label(d.getVilles().toString());
+            v.setFont(Font.font("Book Antiqua",13));
             destinations.getChildren().add(v);
         }
         if(joueur.getCouleur().equals(IJoueur.CouleurJoueur.JAUNE)){
@@ -110,7 +115,9 @@ public class VueAutresJoueursHaut extends HBox {
         return  bgColor;
     }
     public Label getPseudoJoueur() {
-        return new Label(pseudoJoueur.getText());
+        Label pJoueur = new Label(pseudoJoueur.getText());
+        pJoueur.setFont(Font.font("Book Antiqua",FontWeight.BOLD,13));
+        return pJoueur;
     }
 }
 
