@@ -20,8 +20,8 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
@@ -55,9 +55,11 @@ public class VueJoueurCourant extends HBox {
 
     private HBox cartesTransportDefausse;
 
-    private HBox destinationsQuandTrop;
+    private VBox destinationsQuandTrop;
 
     private Popup p;
+
+    private Background destination;
 
     public VueJoueurCourant(){
         this.setSpacing(15);
@@ -123,12 +125,20 @@ public class VueJoueurCourant extends HBox {
 
         setPadding(new Insets(10));
 
-        destinationsQuandTrop = new HBox();
+        destinationsQuandTrop = new VBox();
+        destinationsQuandTrop.setAlignment(Pos.CENTER);
         p = new Popup();
         p.getContent().addAll(destinationsQuandTrop);
         Point2D point = new Point2D(RailsIHM.getPrimaryStage().getHeight()/2, RailsIHM.getPrimaryStage().getWidth()/2);
         p.setAnchorX(RailsIHM.getPrimaryStage().getX() + point.getX());
         p.setAnchorY(RailsIHM.getPrimaryStage().getY() + point.getY());
+
+        Image im = new Image("images/fond-papier-grunge-vintage.jpg");
+
+        BackgroundSize bs = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true,true,true,true);
+        BackgroundImage i = new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,bs );
+        destination = new Background(i);
+
     }
 
 
@@ -292,7 +302,6 @@ public class VueJoueurCourant extends HBox {
     EventHandler<MouseEvent> faireDisparaitrePopupDestination = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent mouseEvent) {
-
             p.hide();
         }
     };
@@ -332,6 +341,7 @@ public class VueJoueurCourant extends HBox {
             nomJoueur.setText(joueurCourant.getNom());
 
             destinationsBox.getChildren().clear();
+            destinationsQuandTrop.getChildren().clear();
             if(joueurCourant.getDestinations().size()<=8) {
                 for (IDestination d : joueurCourant.getDestinations()) {
                     Label v = new Label(d.getVilles().toString());
@@ -351,16 +361,21 @@ public class VueJoueurCourant extends HBox {
                 }
                 Label point = new Label("...");
                 destinationsBox.getChildren().add(point);
-                for (int i = 0; i < joueurCourant.getDestinations().size(); i+=5) {
+                Label dLabel = new Label("Destinations :");
+                dLabel.setFont(Font.font("Book Antiqua",FontWeight.BOLD, 20));
+                HBox listDesti = new HBox();
+                listDesti.setSpacing(10);
+                for (int i = 0; i < joueurCourant.getDestinations().size(); i+=6) {
                     List<IDestination> list = new ArrayList<IDestination>();
                     VBox v = new VBox();
                     v.setAlignment(Pos.CENTER);
-                    v.setSpacing(10);
-                    v.setStyle("-fx-background-color: white");
+                    v.setSpacing(5);
+                    v.setPadding(new Insets(5));
+                    v.setMaxWidth(200);
 
                     int compteur =i;
-                    if((joueurCourant.getDestinations().size()-i)>=5){
-                        while(compteur<i+5){
+                    if((joueurCourant.getDestinations().size()-i)>=6){
+                        while(compteur<i+6){
 
                             list.add(joueurCourant.getDestinations().get(compteur));
                             compteur++;
@@ -375,12 +390,19 @@ public class VueJoueurCourant extends HBox {
 
                     for (IDestination desti : list  ) {
                         Label destination = new Label(desti.getVilles().toString());
+                        destination.setFont(Font.font("Book Antiqua", 16));
+                        destination.setTextFill(Paint.valueOf("#000000"));
+                        destination.setWrapText(true);
+                        destination.setTextAlignment(TextAlignment.CENTER);
                         v.getChildren().add(destination);
 
                     }
 
-                    destinationsQuandTrop.getChildren().add(v);
+                    listDesti.getChildren().add(v);
                 }
+                destinationsQuandTrop.getChildren().addAll(dLabel,listDesti);
+                destinationsQuandTrop.setBackground(destination);
+
 
 
 
