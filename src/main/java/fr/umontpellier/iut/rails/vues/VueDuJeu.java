@@ -78,6 +78,7 @@ public class VueDuJeu extends BorderPane {
 
     private BooleanProperty choisiDesDestinations;
 
+    private Popup popupInfo;
 
     private Font f;
      private Popup popupDestinations = new Popup();
@@ -248,7 +249,9 @@ public class VueDuJeu extends BorderPane {
         //cartes visibles et boutons wagons/bateaux
          HBox cartesVEtBoutons = new HBox();
         VBox boutons = new VBox();
-        boutons.getChildren().addAll(boutonsBateaux,boutonsWagons);
+        VBox boutonPasserBox = new VBox(); boutonPasserBox.getChildren().addAll(new HBox(),passer);
+        boutonPasserBox.setSpacing(50);
+        boutons.getChildren().addAll(boutonsBateaux,boutonsWagons,boutonPasserBox);
         boutons.setAlignment(Pos.CENTER); boutons.setSpacing(5);
         cartesVEtBoutons.getChildren().addAll(cartesVisibles,boutons);
         cartesVEtBoutons.setSpacing(10);
@@ -271,10 +274,8 @@ public class VueDuJeu extends BorderPane {
 
         //bas avec vuejoueurcourant + passer
         HBox nvBas = new HBox();
-        VBox boutonPasser= new VBox(); boutonPasser.getChildren().add(passer);
 
-        boutonPasser.setAlignment(Pos.CENTER);
-        nvBas.getChildren().addAll(vueJoueurCourant,boutonPasser);
+        nvBas.getChildren().addAll(vueJoueurCourant);
         nvBas.setAlignment(Pos.CENTER);
         setBottom(nvBas);
         nvBas.setSpacing(100);
@@ -430,6 +431,97 @@ public class VueDuJeu extends BorderPane {
             popupPions();}
     };
 
+
+
+    EventHandler<MouseEvent> afficherInfoJoueurGauche = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            popupInfo = new Popup();
+            VBox vboxInfo = new VBox();
+            vboxInfo.setSpacing(30);
+            vboxInfo.setAlignment(Pos.CENTER);
+            vboxInfo.setMinWidth(500);
+            vboxInfo.setMinHeight(300);
+            vboxInfo.setStyle(vueJoueurGauche.getBgColor());
+            vboxInfo.getChildren().addAll(vueJoueurGauche.getImageJoueur(),vueJoueurGauche.getPseudoJoueur(), vueJoueurGauche.getDestinations(), vueJoueurGauche.getScoreJoueur());
+            popupInfo.getContent().addAll(vboxInfo);
+
+            Point2D point = plateau.localToScene(0.0, 0.0);
+            popupInfo.setX(RailsIHM.getPrimaryStage().getX() + point.getX() + plateau.getWidth()/2.0 - 250);
+            popupInfo.setY(RailsIHM.getPrimaryStage().getY() + point.getY() + plateau.getHeight()/2.0 - 150);
+
+            popupInfo.show(RailsIHM.getPrimaryStage());
+        }
+    };
+
+    EventHandler<MouseEvent> enleverPopupGauche = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            popupInfo.hide();
+        }
+    };
+
+    EventHandler<MouseEvent> afficherInfoJoueurDroite = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            popupInfo = new Popup();
+            VBox vboxInfo = new VBox();
+            vboxInfo.setSpacing(30);
+            vboxInfo.setAlignment(Pos.CENTER);
+            vboxInfo.setMinWidth(500);
+            vboxInfo.setMinHeight(300);
+            vboxInfo.setStyle(vueJoueurDroite.getBgColor());
+            vboxInfo.getChildren().addAll(vueJoueurDroite.getImageJoueur(),vueJoueurDroite.getPseudoJoueur(), vueJoueurDroite.getDestinations(), vueJoueurDroite.getScoreJoueur());
+            popupInfo.getContent().addAll(vboxInfo);
+
+            Point2D point = plateau.localToScene(0.0, 0.0);
+            popupInfo.setX(RailsIHM.getPrimaryStage().getX() + point.getX() + plateau.getWidth()/2.0 - 250);
+            popupInfo.setY(RailsIHM.getPrimaryStage().getY() + point.getY() + plateau.getHeight()/2.0 - popupInfo.getHeight()/2);
+
+            popupInfo.show(RailsIHM.getPrimaryStage());
+        }
+    };
+
+    EventHandler<MouseEvent> enleverPopupDroite = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            popupInfo.hide();
+        }
+    };
+
+    EventHandler<MouseEvent> afficherInfoJoueurHaut = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            popupInfo = new Popup();
+            VBox vboxInfo = new VBox();
+            vboxInfo.setSpacing(30);
+            vboxInfo.setAlignment(Pos.CENTER);
+            vboxInfo.setMinWidth(500);
+            vboxInfo.setMinHeight(300);
+            vboxInfo.setStyle(vueJoueurHaut.getBgColor());
+            vboxInfo.getChildren().addAll(vueJoueurHaut.getImageJoueur(),vueJoueurHaut.getPseudoJoueur(), vueJoueurHaut.getDestinations(), vueJoueurHaut.getScoreJoueur());
+            popupInfo.getContent().addAll(vboxInfo);
+
+            Point2D point = plateau.localToScene(0.0, 0.0);
+            popupInfo.setX(RailsIHM.getPrimaryStage().getX() + point.getX() + plateau.getWidth()/2.0 - 250);
+            popupInfo.setY(RailsIHM.getPrimaryStage().getY() + point.getY() + plateau.getHeight()/2.0 - popupInfo.getHeight()/2);
+
+            popupInfo.show(RailsIHM.getPrimaryStage());
+        }
+    };
+
+    EventHandler<MouseEvent> enleverPopupHaut = new EventHandler<MouseEvent>() {
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            popupInfo.hide();
+        }
+    };
+
+
+
+
+
+
     public void creerBindings() {
         plateau.creerBindings();
         plateau.prefWidthProperty().bind(getScene().widthProperty());
@@ -463,6 +555,15 @@ public class VueDuJeu extends BorderPane {
             j.cartesTransportPoseesProperty().addListener(vueJoueurCourant.listeCartePosées);
         }
 
+        //Bindings pour quand on veut les infos des joueurs
+        vueJoueurGauche.addEventHandler(MouseEvent.MOUSE_ENTERED, afficherInfoJoueurGauche);
+        vueJoueurGauche.addEventHandler(MouseEvent.MOUSE_EXITED, enleverPopupGauche);
+
+        vueJoueurDroite.addEventHandler(MouseEvent.MOUSE_ENTERED, afficherInfoJoueurDroite);
+        vueJoueurDroite.addEventHandler(MouseEvent.MOUSE_EXITED, enleverPopupDroite);
+
+        vueJoueurHaut.addEventHandler(MouseEvent.MOUSE_ENTERED, afficherInfoJoueurHaut);
+        vueJoueurHaut.addEventHandler(MouseEvent.MOUSE_EXITED, enleverPopupHaut);
     }
 
     public IJeu getJeu() {

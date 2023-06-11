@@ -317,23 +317,23 @@ public class VueJoueurCourant extends HBox {
 
             ImageView joueur = new ImageView();
             if(joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.JAUNE)){
-                setStyle("-fx-background-color:  #f9ca58");
+                setStyle("-fx-background-color:  #DEB35A");
                 joueur.setImage(new Image("images/cartesWagons/avatar-JAUNE.png"));
             }
             else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.BLEU)) {
-                setStyle("-fx-background-color: #288bb6");
+                setStyle("-fx-background-color: #6198CE");
                 joueur.setImage(new Image("images/cartesWagons/avatar-BLEU.png"));
             }
             else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.ROUGE)) {
-                setStyle("-fx-background-color: #af1000");
+                setStyle("-fx-background-color: #CE6956");
                 joueur.setImage(new Image("images/cartesWagons/avatar-ROUGE.png"));
             }
             else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.VERT)) {
-                setStyle("-fx-background-color: #DAF7A6 ");
+                setStyle("-fx-background-color: #A8BD5F ");
                 joueur.setImage(new Image("images/cartesWagons/avatar-VERT.png"));
             }
             else{
-                setStyle("-fx-background-color: #cd04ca");
+                setStyle("-fx-background-color: #CF78C6");
                 joueur.setImage(new Image("images/cartesWagons/avatar-ROSE.png"));
             }
             joueur.setFitHeight(84); joueur.setFitWidth(64.4);
