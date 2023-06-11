@@ -24,7 +24,7 @@ public final class DonneesGraphiques {
             largeurInitialePlateau = map.getWidth(),// 1920.0 largeur de l'image
             hauteurInitialePlateau = map.getHeight(),// 1069.0 hauteur de l'image
             largeurRectangle = 65,
-            hauteurRectangle = 50,
+            hauteurRectangle = 70,
             rayonInitial = 28;
 
     static {
