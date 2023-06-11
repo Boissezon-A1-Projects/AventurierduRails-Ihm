@@ -280,9 +280,13 @@ public class VueDuJeu extends BorderPane {
         nvBas.setSpacing(100);
 
         //aux autres endroits les vues autres joueurs
-        setTop(vueJoueurHaut);
-        setRight(vueJoueurDroite);
-        setLeft(vueJoueurGauche);
+        VBox v = new VBox(); v.getChildren().add(vueJoueurHaut); v.setAlignment(Pos.CENTER);
+        HBox h = new HBox(); h.getChildren().add(vueJoueurDroite); h.setAlignment(Pos.CENTER);
+        HBox h2 = new HBox(); h2.getChildren().add(vueJoueurGauche); h2.setAlignment(Pos.CENTER);
+        setTop(v);
+        setRight(h);
+        setLeft(h2);
+
 
     }
 
