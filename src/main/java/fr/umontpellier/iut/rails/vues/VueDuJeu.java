@@ -22,15 +22,16 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.Popup;
 import javafx.stage.PopupWindow;
 
@@ -84,6 +85,12 @@ public class VueDuJeu extends BorderPane {
 
     public VueDuJeu(IJeu jeu) {
         this.jeu = jeu;
+        Image im = new Image("images/plancher-bois-brun.jpg");
+        BackgroundSize bs = new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, true,true,true,true);
+        BackgroundImage i = new BackgroundImage(im, BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT,BackgroundPosition.DEFAULT,bs );
+        Background bg = new Background(i);
+        setBackground(bg);
+
 
         HBox plat = new HBox();
         plateau = new VuePlateau();
@@ -91,28 +98,36 @@ public class VueDuJeu extends BorderPane {
         passer = new Button("Passer");
         HBox instr = new HBox();
         instruction = new Label();
+        instruction.setFont(Font.font("Book Antiqua", FontWeight.BOLD,16));
 
+//        instruction.setStyle("-fx-font-family: 'ModernAntiqua Book'");
+//        instruction.setStyle("-fx-font-size: 15");
+//        instruction.setFont(Font.loadFont("file:fonts/modern_antiqua/ModernAntiqua-Book.ttf",15));
         instr.getChildren().add(instruction);
         instr.setAlignment(Pos.CENTER);
         instruction.setWrapText(true);
+        instruction.setTextAlignment(TextAlignment.CENTER); instruction.setTextFill(Paint.valueOf("#f3f1d3"));
         destinations = new VBox();
         fieldNbPions = new TextField();
-        fieldNbPions.setVisible(false); fieldNbPions.setDisable(true);
+        fieldNbPions.setVisible(false); fieldNbPions.setDisable(true); fieldNbPions.setFont(Font.font("Book Antiqua", FontWeight.BOLD,16));;
         VBox droite = new VBox();
-        VBox passeretTextField = new VBox(); passeretTextField.getChildren().addAll(fieldNbPions,passer);
+        droite.setSpacing(10);
+        passer.setFont(Font.font("Book Antiqua",FontWeight.BOLD,15));
+        VBox passeretTextField = new VBox(); passeretTextField.getChildren().addAll(fieldNbPions,passer); passeretTextField.setSpacing(10);
         passeretTextField.setAlignment(Pos.CENTER);
         droite.getChildren().addAll(instr, destinations ,passeretTextField);
         droite.setPrefWidth(300);
         droite.setAlignment(Pos.CENTER);
         HBox vraiCentre = new HBox();
+        vraiCentre.setPadding(new Insets(0,10,0,0));
         vraiCentre.getChildren().addAll(plat);
         setCenter(vraiCentre);
         setRight(droite);
-        destinations.setAlignment(Pos.CENTER);
+        destinations.setAlignment(Pos.CENTER); destinations.setSpacing(4);
         fieldNbPions.setMinSize(50,25);
         fieldNbPions.setMaxSize(50,25);
         droite.setAlignment(Pos.CENTER_LEFT);
-
+        droite.setPadding(new Insets(0,10,0,-10));
         // Instancie les vues de joueurs
         vueJoueurCourant = new VueJoueurCourant();
         vueJoueurDroite = new VueAutresJoueursDroite();
@@ -251,6 +266,7 @@ public class VueDuJeu extends BorderPane {
         nvCentre.setPadding(new Insets(10));
         HBox plat = new HBox(plateau);
         plateauEtPioches.getChildren().addAll(plat, pioches);
+        instruction.setFont(Font.font("Book Antiqua", FontWeight.BOLD,20));
         nvCentre.getChildren().addAll(instruction,plateauEtPioches);
         setCenter(nvCentre);
         plateau.creerBindings();
@@ -282,6 +298,7 @@ public class VueDuJeu extends BorderPane {
                     for (IDestination destination: change.getAddedSubList()) {
                         VueDestination labelDestination = new VueDestination(destination);
                         labelDestination.addEventHandler(MouseEvent.MOUSE_CLICKED, actionBoutonDestination);
+                        labelDestination.setFont(Font.font("Book Antiqua",14));
                         destinations.getChildren().add(labelDestination);
                     }
                 }

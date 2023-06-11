@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&display=swap');
 
+
+
 Circle {
     -fx-fill: "transparent";
     /*-fx-stroke: "blue";*/
@@ -10,3 +12,7 @@ Rectangle {
     /*-fx-stroke: "blue";*/
 }
 
+@font-face {
+    font-family: 'ModernAntiqua Book' ;
+    src: url(../fonts/modern_antiqua/ModernAntiqua-Book.ttf) format('truetype');
+}

@@ -24,6 +24,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -58,8 +61,11 @@ public class VueJoueurCourant extends HBox {
 
         VBox infoJoueur = new VBox();
         nomJoueur =new Label();
+        nomJoueur.setFont(Font.font("Book Antiqua", FontWeight.BOLD,14));
         imageJoueur = new Label();
+        imageJoueur.setFont(Font.font("Book Antiqua", FontWeight.BOLD,14));
         scoreJoueur = new Label();
+        scoreJoueur.setFont(Font.font("Book Antiqua",14));
         infoJoueur.getChildren().addAll(nomJoueur,imageJoueur, scoreJoueur);
         infoJoueur.setAlignment(Pos.CENTER);
 
@@ -79,6 +85,7 @@ public class VueJoueurCourant extends HBox {
         v.setFitWidth(30); v.setFitHeight(30);
         bateauLogo.setGraphic(v);
         nbBateaux = new Label();
+        nbBateaux.setFont(Font.font("Book Antiqua",FontWeight.BOLD,14));
         bateau.getChildren().addAll(bateauLogo,nbBateaux);
         bateau.setSpacing(10);
         bateau.setAlignment(Pos.CENTER_LEFT);
@@ -88,6 +95,7 @@ public class VueJoueurCourant extends HBox {
         v2.setFitWidth(30); v2.setFitHeight(30);
         wagonLogo.setGraphic(v2);
         nbWagons = new Label();
+        nbWagons.setFont(Font.font("Book Antiqua",FontWeight.BOLD,14));
         wagons.getChildren().addAll(wagonLogo,nbWagons);
         wagons.setSpacing(10);
         wagons.setAlignment(Pos.CENTER_LEFT);
@@ -97,6 +105,7 @@ public class VueJoueurCourant extends HBox {
         v3.setFitWidth(30); v3.setFitHeight(30);
         portLogo.setGraphic(v3);
         nbPorts = new Label();
+        nbPorts.setFont(Font.font("Book Antiqua",FontWeight.BOLD,14));
         ports.getChildren().addAll(portLogo,nbPorts);
         ports.setSpacing(10);
         ports.setAlignment(Pos.CENTER_LEFT);
@@ -282,23 +291,23 @@ public class VueJoueurCourant extends HBox {
 
             ImageView joueur = new ImageView();
             if(joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.JAUNE)){
-                setStyle("-fx-background-color:  #e9d460");
+                setStyle("-fx-background-color:  #f9ca58");
                 joueur.setImage(new Image("images/cartesWagons/avatar-JAUNE.png"));
             }
             else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.BLEU)) {
-                setStyle("-fx-background-color: #60c4e9");
+                setStyle("-fx-background-color: #288bb6");
                 joueur.setImage(new Image("images/cartesWagons/avatar-BLEU.png"));
             }
             else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.ROUGE)) {
-                setStyle("-fx-background-color: #e96060");
+                setStyle("-fx-background-color: #af1000");
                 joueur.setImage(new Image("images/cartesWagons/avatar-ROUGE.png"));
             }
             else if (joueurCourant.getCouleur().equals(IJoueur.CouleurJoueur.VERT)) {
-                setStyle("-fx-background-color: #60e96c");
+                setStyle("-fx-background-color: #DAF7A6 ");
                 joueur.setImage(new Image("images/cartesWagons/avatar-VERT.png"));
             }
             else{
-                setStyle("-fx-background-color: #e960d8");
+                setStyle("-fx-background-color: #cd04ca");
                 joueur.setImage(new Image("images/cartesWagons/avatar-ROSE.png"));
             }
             joueur.setFitHeight(84); joueur.setFitWidth(64.4);
@@ -309,6 +318,8 @@ public class VueJoueurCourant extends HBox {
             for (IDestination d : joueurCourant.getDestinations()) {
                 Label v = new Label(d.getVilles().toString());
                 v.setWrapText(true);
+                v.setFont(Font.font("Book Antiqua",14));
+                v.setTextAlignment(TextAlignment.CENTER);
                 destinationsBox.getChildren().add(v);
             }
 
